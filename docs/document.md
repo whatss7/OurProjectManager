@@ -42,3 +42,10 @@ OurProjectManager 是一款多人协作的任务管理软件。
 
 # 类图
 ![class](./pic/Model!Main_0.svg)
+
+# 时序图
+## 添加成员
+![add a member](./pic/Add_a_member_to_project.svg)
+
+## 添加任务
+![create a task](./pic/Create_a_task.svg)
