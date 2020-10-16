@@ -38,14 +38,14 @@ OurProjectManager 是一款多人协作的任务管理软件。
 | 查看统计图表     |   ✔️   |   ✔️    |   ✔️   |
 
 # 用例图
-![use case](./pic/Model!UseCaseDiagram_1.svg)
+![use case](./pic/Model!UseCaseDiagram_1.jpg)
 
 # 类图
-![class](./pic/Model!Main_0.svg)
+![class](./pic/Model!Main_0.jpg)
 
 # 时序图
 ## 添加成员
-![add a member](./pic/Add_a_member_to_project.svg)
+![add a member](./pic/Add_a_member_to_project.jpg)
 
 ## 添加任务
-![create a task](./pic/Create_a_task.svg)
+![create a task](./pic/Create_a_task.jpg)
