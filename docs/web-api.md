@@ -1,4 +1,63 @@
-[TOC]
+- [Models](#models)
+  - [ApiResponse](#apiresponse)
+  - [UserLoginInfo](#userlogininfo)
+  - [UserSignUpInfo](#usersignupinfo)
+  - [User](#user)
+  - [Notification](#notification)
+  - [Project](#project)
+  - [Role](#role)
+  - [Task](#task)
+  - [Comment](#comment)
+- [用户](#用户)
+  - [POST /api/user/login 登录](#post-apiuserlogin-登录)
+    - [请求体](#请求体)
+    - [应答](#应答)
+      - [登录成功](#登录成功)
+      - [密码或用户名不正确](#密码或用户名不正确)
+  - [GET /api/user/logout 登出](#get-apiuserlogout-登出)
+    - [请求头](#请求头)
+    - [应答](#应答-1)
+      - [登出成功](#登出成功)
+  - [POST /api/users 注册新用户](#post-apiusers-注册新用户)
+    - [请求体](#请求体-1)
+    - [应答](#应答-2)
+      - [注册成功](#注册成功)
+      - [同名用户已存在](#同名用户已存在)
+  - [GET /api/users/{username} 获取用户信息](#get-apiusersusername-获取用户信息)
+    - [应答](#应答-3)
+      - [获取用户信息成功](#获取用户信息成功)
+      - [用户不存在](#用户不存在)
+  - [PUT /api/users/{username} 修改用户信息](#put-apiusersusername-修改用户信息)
+    - [请求头](#请求头-1)
+    - [请求体](#请求体-2)
+    - [应答](#应答-4)
+  - [DELETE /api/users/{username} 注销用户](#delete-apiusersusername-注销用户)
+    - [请求头](#请求头-2)
+    - [应答](#应答-5)
+  - [GET /api/users/{username}/projects 获取该用户参加的项目](#get-apiusersusernameprojects-获取该用户参加的项目)
+    - [请求头](#请求头-3)
+    - [应答](#应答-6)
+  - [GET /api/users/{username}/recvNotifications 获取收到的通知](#get-apiusersusernamerecvnotifications-获取收到的通知)
+    - [请求头](#请求头-4)
+    - [应答](#应答-7)
+  - [GET /api/users/{username}/recvNotifications/{id} 获取收到的某条通知](#get-apiusersusernamerecvnotificationsid-获取收到的某条通知)
+    - [请求头](#请求头-5)
+    - [应答](#应答-8)
+  - [PATCH /api/users/{username}/recvNotifications/{id} 更新通知已读状态](#patch-apiusersusernamerecvnotificationsid-更新通知已读状态)
+  - [GET /api/users/{username}/sendNotifications 获取发送的通知](#get-apiusersusernamesendnotifications-获取发送的通知)
+  - [POST /api/users/{username}/sendNotifications 给别人发通知](#post-apiusersusernamesendnotifications-给别人发通知)
+  - [GET /api/users/{username}/sendNotifications/{id} 获取发送的某条通知](#get-apiusersusernamesendnotificationsid-获取发送的某条通知)
+- [项目](#项目)
+  - [POST /api/projects 创建新项目](#post-apiprojects-创建新项目)
+  - [GET /api/projects/{id} 获取项目信息](#get-apiprojectsid-获取项目信息)
+  - [PUT /api/projects/{id} 修改项目信息](#put-apiprojectsid-修改项目信息)
+  - [DELETE /api/projects/{id} 删除项目](#delete-apiprojectsid-删除项目)
+  - [GET /api/projects/{projectId}/tasks 获取项目中所有的任务](#get-apiprojectsprojectidtasks-获取项目中所有的任务)
+  - [POST /api/projects/{projectId}/tasks 新建任务](#post-apiprojectsprojectidtasks-新建任务)
+  - [GET /api/projects/{projectId}/tasks/{id} 获取某个任务的信息](#get-apiprojectsprojectidtasksid-获取某个任务的信息)
+  - [PUT /api/projects/{projectId}/tasks/{id} 修改任务](#put-apiprojectsprojectidtasksid-修改任务)
+  - [DELETE /api/projects/{projectId}/tasks/{id} 删除任务](#delete-apiprojectsprojectidtasksid-删除任务)
+
 # Models
 ## ApiResponse
 ```json
@@ -79,8 +138,8 @@ todo http 状态码
 注：
 
 1. 要想获取该用户加入的仓库，需要通过 /api/users/{id}/projects。
-1. 要想获取收件人为该用户的通知，需要通过 /api/users/{id}/notifications
-1. 要想获取发件人为该用户的通知，todo
+1. 要想获取收件人为该用户的通知，需要通过 /api/users/{id}/recvNotifications
+1. 要想获取发件人为该用户的通知，需要通过 /api/users/{id}/sendNotifications
 
 ## Notification
 ```json
@@ -172,6 +231,9 @@ todo http 状态码
 
 1. 若要获取项目内成员列表（非主管或管理员），需要通过 /api/projects/{id}/members
 1. 若要获取项目内任务列表，需要通过 /api/projects/{id}/tasks
+
+## Role
+todo 用户在项目内的角色
 
 ## Task
 ```json
@@ -271,7 +333,7 @@ HTTP 401 Unauthorized
 
 ```json
 {
-    "status": "WrongPasswordOrUsername",
+    "type": "WrongPasswordOrUsername",
     "message": "..."
 }
 ```
@@ -307,7 +369,7 @@ HTTP 409 Conflict
 
 ```json
 {
-    "status": "UserAlreadyExist",
+    "type": "UserAlreadyExist",
     "message": "..."
 }
 ```
@@ -337,46 +399,73 @@ HTTP 404 Not Found
 
 ```json
 {
-    "status": "UserNotFound",
+    "type": "UserNotFound",
     "message": "..."
 }
 ```
 
 ## PUT /api/users/{username} 修改用户信息
+todo
 ### 请求头
 ### 请求体
 ### 应答
 
 ## DELETE /api/users/{username} 注销用户
+todo
 ### 请求头
 ### 应答
 
 ##  GET /api/users/{username}/projects 获取该用户参加的项目
+todo
 ### 请求头
 ### 应答
 
-## GET /api/users/{username}/notifications 获取该用户的通知
+## GET /api/users/{username}/recvNotifications 获取收到的通知
+todo
 ### 请求头
 ### 应答
 
-## GET /api/users/{username}/notifications/{id} 获取该用户的某条通知
+## GET /api/users/{username}/recvNotifications/{id} 获取收到的某条通知
+todo
 ### 请求头
 ### 应答
 
-## PATCH /api/users/{username}/notifications/{id} 更新通知已读状态
-todo 更新通知已读状态
+## PATCH /api/users/{username}/recvNotifications/{id} 更新通知已读状态
+todo
+
+## GET /api/users/{username}/sendNotifications 获取发送的通知
+todo
+
+## POST /api/users/{username}/sendNotifications 给别人发通知
+todo
+
+## GET /api/users/{username}/sendNotifications/{id} 获取发送的某条通知
+todo
 
 # 项目
 ## POST /api/projects 创建新项目
+todo
 
 ## GET /api/projects/{id} 获取项目信息
-todo 是否加入有所不同
+todo
 
 ## PUT /api/projects/{id} 修改项目信息
+todo
+
 ## DELETE /api/projects/{id} 删除项目
+todo
 
 ## GET /api/projects/{projectId}/tasks 获取项目中所有的任务
+todo
+
 ## POST /api/projects/{projectId}/tasks 新建任务
+todo
+
 ## GET /api/projects/{projectId}/tasks/{id} 获取某个任务的信息
+todo
+
 ## PUT /api/projects/{projectId}/tasks/{id} 修改任务
+todo
+
 ## DELETE /api/projects/{projectId}/tasks/{id} 删除任务
+todo
