@@ -1,14 +1,14 @@
-- [ApiResponse](#apiresponse)
-- [UserLoginInfo](#userlogininfo)
-- [UserSignUpInfo](#usersignupinfo)
-- [User](#user)
-- [Notification](#notification)
-- [Project](#project)
-- [Role](#role)
-- [Task](#task)
-- [Comment](#comment)
+- [ApiResponse 响应消息](#apiresponse-响应消息)
+- [UserLoginInfo 用户登录信息](#userlogininfo-用户登录信息)
+- [UserSignUpInfo 用户注册信息](#usersignupinfo-用户注册信息)
+- [User 用户](#user-用户)
+- [Notification 通知](#notification-通知)
+- [Project 项目](#project-项目)
+- [Role 角色](#role-角色)
+- [Task 任务](#task-任务)
+- [Comment 评论](#comment-评论)
 
-# ApiResponse
+# ApiResponse 响应消息
 ```json
 {
     "type": "string",
@@ -23,13 +23,13 @@
 1. type - 错误类型
 1. message - 详细信息
 
-`type` 字段可以有以下取值（如有必要可继续增加）
+`type` 字段可以有以下取值（可继续增加）
 
 1. WrongPasswordOrUsername 用户名或密码错误
 1. UserAlreadyExist 同名用户已存在
 1. UserNotFound 找不到用户
 
-# UserLoginInfo
+# UserLoginInfo 用户登录信息
 ```json
 {
     "username": "string",
@@ -44,7 +44,7 @@
 1. username - 用户名
 1. password - 密码
 
-# UserSignUpInfo
+# UserSignUpInfo 用户注册信息
 ```json
 {
     "username": "string",
@@ -61,7 +61,7 @@
 1. nickname - 昵称，可不唯一
 1. password - 密码
 
-# User
+# User 用户
 ```json
 {
     "id": 5000,
@@ -90,7 +90,7 @@
 1. 要想获取收件人为该用户的通知，需要通过 /api/users/{id}/recvNotifications
 1. 要想获取发件人为该用户的通知，需要通过 /api/users/{id}/sendNotifications
 
-# Notification
+# Notification 通知
 ```json
 {
     "id": 500,
@@ -131,7 +131,7 @@
 
 若用户 A 邀请用户 B 加入某项目，则用户 B 会收到一条通知，发件人是用户 A。
 
-# Project
+# Project 项目
 ```json
 {
     "id": 500,
@@ -186,10 +186,10 @@ TODO 获取、修改成员权限
 
 TODO 转让项目
 
-# Role
+# Role 角色
 TODO 用户在项目内的角色
 
-# Task
+# Task 任务
 ```json
 {
     "id": 200,
@@ -236,7 +236,7 @@ TODO 用户在项目内的角色
 
 1. 若要获取某个任务下的评论，需通过 /api/projects/{projectId}/tasks/{taskId}/comments
 
-# Comment
+# Comment 评论
 ```json
 {
     "id": 777,
