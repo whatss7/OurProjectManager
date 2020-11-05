@@ -46,6 +46,7 @@
   - [请求头](#请求头-5)
   - [应答](#应答-8)
     - [获取通知成功](#获取通知成功-1)
+    - [该条通知不存在](#该条通知不存在)
     - [无 token 或 token 非法](#无-token-或-token-非法-5)
     - [操作者不是对应的用户](#操作者不是对应的用户-4)
 - [PATCH /api/users/{username}/recvNotifications/{id} 更新通知已读状态](#patch-apiusersusernamerecvnotificationsid-更新通知已读状态)
@@ -65,6 +66,7 @@
   - [请求头](#请求头-8)
   - [应答](#应答-11)
     - [获取通知成功](#获取通知成功-3)
+    - [该条通知不存在](#该条通知不存在-1)
     - [无 token 或 token 非法](#无-token-或-token-非法-8)
     - [操作者不是对应的用户](#操作者不是对应的用户-6)
 
@@ -102,6 +104,8 @@ HTTP 401 Unauthorized
 ```
 
 # GET /api/user/logout 登出
+已登录的用户才能登出。
+
 ## 请求头
 需要在 Authorization 头信息中包含 token，标识当前用户。
 
@@ -111,6 +115,15 @@ HTTP 200 OK
 
 ### 无 token 或 token 非法
 HTTP 401 Unauthorized
+
+返回一个 ApiResponse。
+
+```json
+{
+    "type": "NotLogin",
+    "message": "..."
+}
+```
 
 # POST /api/users 注册新用户
 ## 请求体
@@ -325,6 +338,18 @@ HTTP 200 OK
 
 返回一个 Notification 对象。
 
+### 该条通知不存在
+HTTP 404 NotFound
+
+返回一个 ApiResponse。
+
+```json
+{
+    "type": "NotificationNotFound",
+    "message": "..."
+}
+```
+
 ### 无 token 或 token 非法
 HTTP 401 Unauthorized
 
@@ -424,6 +449,18 @@ HTTP 401 Unauthorized
 HTTP 200 OK
 
 返回一个 Notification 对象。
+
+### 该条通知不存在
+HTTP 404 NotFound
+
+返回一个 ApiResponse。
+
+```json
+{
+    "type": "NotificationNotFound",
+    "message": "..."
+}
+```
 
 ### 无 token 或 token 非法
 HTTP 401 Unauthorized

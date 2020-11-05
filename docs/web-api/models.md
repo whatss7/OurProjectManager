@@ -6,6 +6,7 @@
 - [Member 项目成员](#member-项目成员)
 - [Task 任务](#task-任务)
 - [Comment 评论](#comment-评论)
+- [Invitation 邀请](#invitation-邀请)
 - [ApiResponse 响应消息](#apiresponse-响应消息)
 
 # UserLoginInfo 用户登录信息
@@ -108,8 +109,6 @@
 1. sender - 发件人，一个 User 对象
 1. receiver - 收件人，一个 User 对象
 
-若用户 A 邀请用户 B 加入某项目，则用户 B 会收到一条通知，发件人是用户 A。
-
 # Project 项目
 ```json
 {
@@ -162,15 +161,18 @@
 1. 若要获取项目中的任务，需要通过 /api/projects/{id}/tasks
 1. 若要获取项目成员列表，需要通过 /api/projects/{id}/members
 
-TODO 邀请成员
-
 # Member 项目成员
 ```json
 {
-    "user":{
-
+    "user": {
+        "id": 5000,
+        "username": "string",
+        "nickname": "string",
+        "createAt": "string",
+        "updateAt": "string",
+        "projectCount": 10
     },
-    "role":"string",
+    "role": "SuperAdmin",
     "joinAt": "string"
 }
 ```
@@ -180,7 +182,10 @@ TODO 邀请成员
 属性：
 
 1. user - 用户，一个 User 对象
-1. role - 在项目中的角色，用字符串表示
+1. role - 在项目中的角色，用字符串表示，可取以下值：
+    1. SuperAdmin - 项目主管
+    1. Admin - 项目管理员
+    1. Member - 普通成员
 1. joinAt - 加入本项目的时间
 
 注：角色用字符串表示好像不太好，不清楚有没有更好的解决方法。
@@ -278,6 +283,57 @@ TODO 邀请成员
 1. createAt - 评论时间
 1. user - 评论的作者，一个 User 对象
 
+# Invitation 邀请
+```json
+{
+    "id": 2345,
+    "createAt": "string",
+    "endAt": "string",
+    "status": "string",
+    "sender": {
+        "id": 5000,
+        "username": "string",
+        "nickname": "string",
+        "createAt": "string",
+        "updateAt": "string",
+        "projectCount": 10
+    },
+    "receiver": {
+        "id": 5001,
+        "username": "strin1",
+        "nickname": "string",
+        "createAt": "string",
+        "updateAt": "string",
+        "projectCount": 10
+    },
+    "project": {
+        //Project 对象，懒得复制了
+    }
+}
+```
+
+表示邀请的 JSON 对象。
+
+属性：
+
+1. id - 邀请的 Id
+1. createAt - 邀请发送时间
+1. endAt - 邀请被取消、被接受、被拒绝的时间
+    - 若邀请仍是 created 状态，则为 null
+1. status - 邀请的状态，有以下几种取值：
+    1. created - （项目管理员）已创建
+    1. canceled - （项目管理员）已取消
+    1. accepted -（被邀请者） 已接受
+    1. rejected - （被邀请者）已拒绝
+1. sender - 发送者
+1. receiver - 被邀请者
+1. project - 邀请加入哪个项目
+
+注：
+
+1. 对于项目管理员，通过 /api/projects/{projectId}/invitations 发送邀请，也可以随时查看、取消邀请
+1. 对于被邀请者，通过 /api/projects/{projectId}/invitations/{id}/accept 接受邀请，通过 /api/projects/{projectId}/invitations/{id}/reject 拒绝邀请
+
 # ApiResponse 响应消息
 ```json
 {
@@ -286,17 +342,24 @@ TODO 邀请成员
 }
 ```
 
-发生错误时，设置相应的 HTTP 状态码，并发回一条格式像这样的 JSON。
+发生错误时，设置相应的 HTTP 响应代码，并发回一条格式像这样的 JSON。
 
 属性：
 
 1. type - 错误类型
 1. message - 详细信息
 
-`type` 字段可以有以下取值（可继续增加）
+错误类型、`type` 字段、HTTP 响应码的对应关系如下表。如有必要可继续扩充。
 
-1. WrongPasswordOrUsername 用户名或密码错误
-1. UserAlreadyExist 同名用户已存在
-1. UserNotFound 找不到用户
-1. NotLogin 未登录
-1. PermissionDenied 没有权限
+| 错误类型         | `type` 字段的值         | HTTP 响应代码    |
+| ---------------- | ----------------------- | ---------------- |
+| 用户名或密码错误 | WrongPasswordOrUsername | 401 Unauthorized |
+| 同名用户已存在   | UserAlreadyExist        | 409 Conflict     |
+| 用户不存在       | UserNotFound            | 404 Not Found    |
+| 通知不存在       | NotificationNotFound    | 404 Not Found    |
+| 未登录           | NotLogin                | 401 Unauthorized |
+| 没有权限         | PermissionDenied        | 403 Forbidden    |
+| 项目不存在       | ProjectNotFound         | 404 Not Found    |
+| 任务不存在       | TaskNotFound            | 404 Not Found    |
+| 评论不存在       | CommentNotFound         | 404 Not Found    |
+| 成员不存在       | MemberNotFound          | 404 Not Found    |
