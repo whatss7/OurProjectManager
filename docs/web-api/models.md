@@ -1,6 +1,7 @@
+- [User 用户](#user-用户)
 - [UserLoginInfo 用户登录信息](#userlogininfo-用户登录信息)
 - [UserSignUpInfo 用户注册信息](#usersignupinfo-用户注册信息)
-- [User 用户](#user-用户)
+- [UpdatePassword 修改密码](#updatepassword-修改密码)
 - [Notification 通知](#notification-通知)
 - [Project 项目](#project-项目)
 - [Member 项目成员](#member-项目成员)
@@ -8,6 +9,36 @@
 - [Comment 评论](#comment-评论)
 - [Invitation 邀请](#invitation-邀请)
 - [ApiResponse 响应消息](#apiresponse-响应消息)
+
+# User 用户
+```json
+{
+    "id": 5000,
+    "username": "string",
+    "nickname": "string",
+    "createAt": "string",
+    "updateAt": "string",
+    "projectCount": 10
+}
+```
+
+用来表示用户信息的 JSON。
+
+属性：
+
+1. id - 用户 ID，必须唯一
+1. username - 用户名，必须唯一
+1. nickname - 昵称，可不唯一
+1. createAt - 用户注册时间
+1. updateAt - 用户信息更新时间
+1. projectCount - 参加项目的总数
+
+注：
+
+1. 要想获取该用户加入的仓库，需要通过 /api/users/{username}/projects。
+1. 要想获取收件人为该用户的通知，需要通过 /api/users/{username}/recvNotifications
+1. 要想获取发件人为该用户的通知，需要通过 /api/users/{username}/sendNotifications
+1. 要想修改密码，需要通过 /api/users/{username}/password
 
 # UserLoginInfo 用户登录信息
 ```json
@@ -41,34 +72,15 @@
 1. nickname - 昵称，可不唯一
 1. password - 密码
 
-# User 用户
+# UpdatePassword 修改密码
 ```json
 {
-    "id": 5000,
-    "username": "string",
-    "nickname": "string",
-    "createAt": "string",
-    "updateAt": "string",
-    "projectCount": 10
+    "oldPassword": "string",
+    "newPassword": "string"
 }
 ```
 
-用来表示用户信息的 JSON。
-
-属性：
-
-1. id - 用户 ID，必须唯一
-1. username - 用户名，必须唯一
-1. nickname - 昵称，可不唯一
-1. createAt - 用户注册时间
-1. updateAt - 用户信息更新时间
-1. projectCount - 参加项目的总数
-
-注：
-
-1. 要想获取该用户加入的仓库，需要通过 /api/users/{id}/projects。
-1. 要想获取收件人为该用户的通知，需要通过 /api/users/{id}/recvNotifications
-1. 要想获取发件人为该用户的通知，需要通过 /api/users/{id}/sendNotifications
+修改密码时发送的 JSON。
 
 # Notification 通知
 ```json
@@ -224,6 +236,7 @@
             "projectCount": 10
         }
     ],
+    "isComplete": false,
     "completeAt": "string",
     "completer": {
         "id": 5001,
@@ -248,6 +261,7 @@
 1. creator - 创建者，一个 User 对象
 1. executors - 执行人，一个 User 数组
     - 若未分配执行人则为空数组 `[]`
+1. isComplete - 是否已完成
 1. completeAt - 完成时间
     - 若未完成则为 null
 1. completer - 完成者，一个 User 对象
@@ -256,6 +270,7 @@
 注：
 
 1. 若要获取某个任务下的评论，需通过 /api/projects/{projectId}/tasks/{taskId}/comments
+1. 修改任务用 PUT 方法，更新完成状态用 PATCH 方法
 
 # Comment 评论
 ```json
@@ -306,9 +321,7 @@
         "updateAt": "string",
         "projectCount": 10
     },
-    "project": {
-        //Project 对象，懒得复制了
-    }
+    "projectUrl": "string"
 }
 ```
 
@@ -327,7 +340,7 @@
     1. rejected - （被邀请者）已拒绝
 1. sender - 发送者
 1. receiver - 被邀请者
-1. project - 邀请加入哪个项目
+1. projectUrl - 项目的地址
 
 注：
 
@@ -354,6 +367,7 @@
 | 错误类型         | `type` 字段的值         | HTTP 响应代码    |
 | ---------------- | ----------------------- | ---------------- |
 | 用户名或密码错误 | WrongPasswordOrUsername | 401 Unauthorized |
+| 旧密码错误       | WrongOldPassword        | 403 Forbidden    |
 | 同名用户已存在   | UserAlreadyExist        | 409 Conflict     |
 | 用户不存在       | UserNotFound            | 404 Not Found    |
 | 通知不存在       | NotificationNotFound    | 404 Not Found    |
