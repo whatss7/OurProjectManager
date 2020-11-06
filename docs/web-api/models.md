@@ -224,6 +224,7 @@
             "projectCount": 10
         }
     ],
+    "isComplete": false,
     "completeAt": "string",
     "completer": {
         "id": 5001,
@@ -248,6 +249,7 @@
 1. creator - 创建者，一个 User 对象
 1. executors - 执行人，一个 User 数组
     - 若未分配执行人则为空数组 `[]`
+1. isComplete - 是否已完成
 1. completeAt - 完成时间
     - 若未完成则为 null
 1. completer - 完成者，一个 User 对象
@@ -256,6 +258,7 @@
 注：
 
 1. 若要获取某个任务下的评论，需通过 /api/projects/{projectId}/tasks/{taskId}/comments
+1. 修改任务用 PUT 方法，更新完成状态用 PATCH 方法
 
 # Comment 评论
 ```json
@@ -306,9 +309,7 @@
         "updateAt": "string",
         "projectCount": 10
     },
-    "project": {
-        //Project 对象，懒得复制了
-    }
+    "projectUrl": "string"
 }
 ```
 
@@ -327,7 +328,7 @@
     1. rejected - （被邀请者）已拒绝
 1. sender - 发送者
 1. receiver - 被邀请者
-1. project - 邀请加入哪个项目
+1. projectUrl - 项目的地址
 
 注：
 

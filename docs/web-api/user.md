@@ -17,13 +17,14 @@
   - [应答](#应答-3)
     - [获取用户信息成功](#获取用户信息成功)
     - [用户不存在](#用户不存在)
-- [PUT /api/users/{username} 修改用户信息](#put-apiusersusername-修改用户信息)
+- [PATCH /api/users/{username} 修改用户名](#patch-apiusersusername-修改用户名)
   - [请求头](#请求头-1)
   - [请求体](#请求体-2)
   - [应答](#应答-4)
     - [修改用户信息成功](#修改用户信息成功)
     - [无 token 或 token 非法](#无-token-或-token-非法-1)
     - [操作者不是对应的用户](#操作者不是对应的用户)
+    - [同名用户已存在](#同名用户已存在-1)
 - [DELETE /api/users/{username} 注销用户](#delete-apiusersusername-注销用户)
   - [请求头](#请求头-2)
   - [应答](#应答-5)
@@ -49,24 +50,31 @@
     - [该条通知不存在](#该条通知不存在)
     - [无 token 或 token 非法](#无-token-或-token-非法-5)
     - [操作者不是对应的用户](#操作者不是对应的用户-4)
-- [PATCH /api/users/{username}/recvNotifications/{id} 更新通知已读状态](#patch-apiusersusernamerecvnotificationsid-更新通知已读状态)
-- [GET /api/users/{username}/sendNotifications 获取发送的通知](#get-apiusersusernamesendnotifications-获取发送的通知)
+- [PATCH /api/users/{username}/recvNotifications/{id} 修改通知已读状态](#patch-apiusersusernamerecvnotificationsid-修改通知已读状态)
   - [请求头](#请求头-6)
+  - [请求体](#请求体-3)
   - [应答](#应答-9)
+    - [修改已读状态成功](#修改已读状态成功)
+    - [该条通知不存在](#该条通知不存在-1)
+    - [无 token 或 token 无效](#无-token-或-token-无效)
+    - [操作者不是对应用户](#操作者不是对应用户)
+- [GET /api/users/{username}/sendNotifications 获取发送的通知](#get-apiusersusernamesendnotifications-获取发送的通知)
+  - [请求头](#请求头-7)
+  - [应答](#应答-10)
     - [获取通知成功](#获取通知成功-2)
     - [无 token 或 token 非法](#无-token-或-token-非法-6)
     - [操作者不是对应的用户](#操作者不是对应的用户-5)
 - [POST /api/users/{username}/sendNotifications 给别人发通知](#post-apiusersusernamesendnotifications-给别人发通知)
-  - [请求头](#请求头-7)
-  - [请求体](#请求体-3)
-  - [应答](#应答-10)
+  - [请求头](#请求头-8)
+  - [请求体](#请求体-4)
+  - [应答](#应答-11)
     - [通知发送成功](#通知发送成功)
     - [无 token 或 token 非法](#无-token-或-token-非法-7)
 - [GET /api/users/{username}/sendNotifications/{id} 获取发送的某条通知](#get-apiusersusernamesendnotificationsid-获取发送的某条通知)
-  - [请求头](#请求头-8)
-  - [应答](#应答-11)
+  - [请求头](#请求头-9)
+  - [应答](#应答-12)
     - [获取通知成功](#获取通知成功-3)
-    - [该条通知不存在](#该条通知不存在-1)
+    - [该条通知不存在](#该条通知不存在-2)
     - [无 token 或 token 非法](#无-token-或-token-非法-8)
     - [操作者不是对应的用户](#操作者不是对应的用户-6)
 
@@ -183,14 +191,14 @@ HTTP 404 Not Found
 }
 ```
 
-# PUT /api/users/{username} 修改用户信息
-需要验证身份，只有自己才能修改自己的信息。
+# PATCH /api/users/{username} 修改用户名
+需要验证身份，只有自己才能修改自己的用户名。
 
 ## 请求头
 需要在 Authorization 头信息中包含 token。
 
 ## 请求体
-TODO 修改用户信息 请求体
+一个 User 对象，只使用 username 字段。
 
 ## 应答
 ### 修改用户信息成功
@@ -216,6 +224,18 @@ HTTP 403 Forbidden
 ```json
 {
     "type": "PermissionDenied",
+    "message": "..."
+}
+```
+
+### 同名用户已存在
+HTTP 409 Conflict
+
+返回一个 ApiResponse。
+
+```json
+{
+    "type": "UserAlreadyExist",
     "message": "..."
 }
 ```
@@ -374,8 +394,22 @@ HTTP 403 Forbidden
 }
 ```
 
-# PATCH /api/users/{username}/recvNotifications/{id} 更新通知已读状态
-TODO 更新通知已读状态
+# PATCH /api/users/{username}/recvNotifications/{id} 修改通知已读状态
+需要验证身份，只有自己才能修改自己收到的通知的已读状态。
+
+## 请求头
+需要在 Authorization 头信息中包含 token。
+
+## 请求体
+一个 Notification 对象，只使用 isRead 字段。
+
+## 应答
+### 修改已读状态成功
+HTTP 200 OK
+
+### 该条通知不存在
+### 无 token 或 token 无效
+### 操作者不是对应用户
 
 # GET /api/users/{username}/sendNotifications 获取发送的通知
 需要验证身份，只有自己才能查看自己的通知。
