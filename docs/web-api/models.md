@@ -152,7 +152,7 @@
             "createAt": "string",
             "updateAt": "string",
             "projectCount": 10
-        },
+        }
     ]
 }
 ```
