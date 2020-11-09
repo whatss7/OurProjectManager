@@ -8,14 +8,14 @@ public interface IUserDao {
      * @param id 用户 ID
      * @return 若不存在则返回 null
      */
-    User findUserById(int id);
+    User getUserById(int id);
 
     /**
      * 根据用户名查询用户
      * @param username 用户名
      * @return 若不存在则返回 null
      */
-    User findUserByName(int username);
+    User getUserByName(int username);
 
     /**
      * 更新用户信息

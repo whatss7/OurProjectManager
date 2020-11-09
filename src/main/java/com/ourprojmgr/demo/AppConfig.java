@@ -1,7 +1,7 @@
 package com.ourprojmgr.demo;
 
 import com.ourprojmgr.demo.controller.LoginInterceptor;
-import com.ourprojmgr.demo.controller.UserArgumentResolver;
+import com.ourprojmgr.demo.controller.CurrentUserArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -17,7 +17,7 @@ public class AppConfig implements WebMvcConfigurer {
      */
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(loginInterceptor());
+        registry.addInterceptor(loginInterceptor()).addPathPatterns("/api/**");
     }
 
     /**
@@ -25,7 +25,7 @@ public class AppConfig implements WebMvcConfigurer {
      */
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        resolvers.add(userArgumentResolver());
+        resolvers.add(currentUserArgumentResolver());
     }
 
     @Bean
@@ -34,7 +34,7 @@ public class AppConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public UserArgumentResolver userArgumentResolver() {
-        return new UserArgumentResolver();
+    public CurrentUserArgumentResolver currentUserArgumentResolver() {
+        return new CurrentUserArgumentResolver();
     }
 }

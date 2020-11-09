@@ -17,7 +17,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponseJson> exceptionHandler(HttpServletRequest request, Exception e) {
-        ApiResponseJson response = new ApiResponseJson("UnknownError", e.getMessage());
+        ApiResponseJson response = new ApiResponseJson(
+                ApiResponseJson.TYPE_UNKNOWN_ERROR, e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

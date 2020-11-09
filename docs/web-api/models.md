@@ -364,16 +364,17 @@
 
 错误类型、`type` 字段、HTTP 响应码的对应关系如下表。如有必要可继续扩充。
 
-| 错误类型         | `type` 字段的值         | HTTP 响应代码    |
-| ---------------- | ----------------------- | ---------------- |
-| 用户名或密码错误 | WrongPasswordOrUsername | 401 Unauthorized |
-| 旧密码错误       | WrongOldPassword        | 403 Forbidden    |
-| 同名用户已存在   | UserAlreadyExist        | 409 Conflict     |
-| 用户不存在       | UserNotFound            | 404 Not Found    |
-| 通知不存在       | NotificationNotFound    | 404 Not Found    |
-| 未登录           | NotLogin                | 401 Unauthorized |
-| 没有权限         | PermissionDenied        | 403 Forbidden    |
-| 项目不存在       | ProjectNotFound         | 404 Not Found    |
-| 任务不存在       | TaskNotFound            | 404 Not Found    |
-| 评论不存在       | CommentNotFound         | 404 Not Found    |
-| 成员不存在       | MemberNotFound          | 404 Not Found    |
+| 错误类型         | `type` 字段的值         | HTTP 响应代码             |
+| ---------------- | ----------------------- | ------------------------- |
+| 用户名或密码错误 | WrongPasswordOrUsername | 401 Unauthorized          |
+| 旧密码错误       | WrongOldPassword        | 403 Forbidden             |
+| 同名用户已存在   | UserAlreadyExist        | 409 Conflict              |
+| 用户不存在       | UserNotFound            | 404 Not Found             |
+| 通知不存在       | NotificationNotFound    | 404 Not Found             |
+| 未登录           | NotLogin                | 401 Unauthorized          |
+| 没有权限         | PermissionDenied        | 403 Forbidden             |
+| 项目不存在       | ProjectNotFound         | 404 Not Found             |
+| 任务不存在       | TaskNotFound            | 404 Not Found             |
+| 评论不存在       | CommentNotFound         | 404 Not Found             |
+| 成员不存在       | MemberNotFound          | 404 Not Found             |
+| 未知错误         | UnknownError            | 500 Internal Server Error |

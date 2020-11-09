@@ -1,22 +1,25 @@
 package com.ourprojmgr.demo.controller;
 
+import com.ourprojmgr.demo.dbmodel.User;
 import org.springframework.core.MethodParameter;
 import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
+import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
- * 参数分解器，提取用户信息
+ * 参数分解器，将请求头中的 token 转化为 User 对象
+ * @author 朱华彬
  */
-public class UserArgumentResolver implements HandlerMethodArgumentResolver {
+public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
     /**
      * 判断是否处理该参数分解
      */
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.getParameterType().isAssignableFrom(String.class)
-                && parameter.hasParameterAnnotation(UserInRequest.class);
+        return parameter.getParameterType().isAssignableFrom(User.class)
+                && parameter.hasParameterAnnotation(CurrentUser.class);
     }
 
     /**
@@ -24,7 +27,6 @@ public class UserArgumentResolver implements HandlerMethodArgumentResolver {
      */
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
-        //TODO zhb
-        return null;
+        return webRequest.getAttribute("currentUser", RequestAttributes.SCOPE_REQUEST);
     }
 }
