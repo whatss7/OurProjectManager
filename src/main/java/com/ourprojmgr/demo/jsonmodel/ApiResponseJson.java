@@ -1,8 +1,17 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
-public class ApiResponse {
+/**
+ * 返回的响应消息
+ * @author 朱华彬
+ */
+public class ApiResponseJson {
     private String type;
     private String message;
+
+    public ApiResponseJson(String type, String message) {
+        this.type = type;
+        this.message = message;
+    }
 
     public String getType() {
         return type;

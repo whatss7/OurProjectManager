@@ -1,6 +1,10 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
-public class UserLoginInfo {
+/**
+ * 表示登录消息的 JSON
+ * @author 朱华彬
+ */
+public class LoginJson {
     private String username;
     private String password;
 

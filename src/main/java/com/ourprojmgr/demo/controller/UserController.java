@@ -1,7 +1,8 @@
 package com.ourprojmgr.demo.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 负责处理用户相关请求的控制器
@@ -9,4 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    @GetMapping("/logout")
+    @LoginRequired
+    public ResponseEntity<?> logout() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }

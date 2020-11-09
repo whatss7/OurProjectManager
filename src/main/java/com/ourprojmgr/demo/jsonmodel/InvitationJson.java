@@ -1,14 +1,18 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
 import java.time.LocalDateTime;
 
-public class Invitation {
-    private long id;
+/**
+ * 表示邀请的 JSON
+ * @author 朱华彬
+ */
+public class InvitationJson {
+    private int id;
     private LocalDateTime createAt;
     private LocalDateTime endAt;
     private String status;
-    private User sender;
-    private User receiver;
+    private UserJson sender;
+    private UserJson receiver;
     private String projectUrl;
 
     public static final String STATUS_CREATED = "created";
@@ -16,11 +20,11 @@ public class Invitation {
     public static final String STATUS_ACCEPTED = "accepted";
     public static final String STATUS_REJECTED = "rejected";
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -48,19 +52,19 @@ public class Invitation {
         this.status = status;
     }
 
-    public User getSender() {
+    public UserJson getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(UserJson sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public UserJson getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(UserJson receiver) {
         this.receiver = receiver;
     }
 

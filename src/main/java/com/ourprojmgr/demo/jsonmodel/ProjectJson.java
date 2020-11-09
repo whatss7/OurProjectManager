@@ -1,21 +1,25 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Project {
-    private long id;
+/**
+ * 表示项目的 JSON
+ * @author 朱华彬
+ */
+public class ProjectJson {
+    private int id;
     private String name;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
-    private User superAdmin;
-    private List<User> admins;
+    private UserJson superAdmin;
+    private List<UserJson> admins;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -43,19 +47,19 @@ public class Project {
         this.updateAt = updateAt;
     }
 
-    public User getSuperAdmin() {
+    public UserJson getSuperAdmin() {
         return superAdmin;
     }
 
-    public void setSuperAdmin(User superAdmin) {
+    public void setSuperAdmin(UserJson superAdmin) {
         this.superAdmin = superAdmin;
     }
 
-    public List<User> getAdmins() {
+    public List<UserJson> getAdmins() {
         return admins;
     }
 
-    public void setAdmins(List<User> admins) {
+    public void setAdmins(List<UserJson> admins) {
         this.admins = admins;
     }
 

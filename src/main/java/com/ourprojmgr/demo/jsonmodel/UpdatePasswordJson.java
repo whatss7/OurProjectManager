@@ -1,6 +1,10 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
-public class UpdatePassword {
+/**
+ * 表示更新密码消息的 JSON
+ * @author 朱华彬
+ */
+public class UpdatePasswordJson {
     private String oldPassword;
     private String newPassword;
 

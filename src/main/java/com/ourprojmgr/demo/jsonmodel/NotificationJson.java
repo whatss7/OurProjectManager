@@ -1,21 +1,25 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
 import java.time.LocalDateTime;
 
-public class Notification {
-    private long id;
+/**
+ * 表示通知的 JSON
+ * @author 朱华彬
+ */
+public class NotificationJson {
+    private int id;
     private boolean isRead;
     private String title;
     private String body;
     private LocalDateTime createAt;
-    private User sender;
-    private User receiver;
+    private UserJson sender;
+    private UserJson receiver;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -51,19 +55,19 @@ public class Notification {
         this.createAt = createAt;
     }
 
-    public User getSender() {
+    public UserJson getSender() {
         return sender;
     }
 
-    public void setSender(User sender) {
+    public void setSender(UserJson sender) {
         this.sender = sender;
     }
 
-    public User getReceiver() {
+    public UserJson getReceiver() {
         return receiver;
     }
 
-    public void setReceiver(User receiver) {
+    public void setReceiver(UserJson receiver) {
         this.receiver = receiver;
     }
 

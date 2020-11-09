@@ -1,25 +1,29 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class Task {
-    private long id;
+/**
+ * 表示任务的 JSON
+ * @author 朱华彬
+ */
+public class TaskJson {
+    private int id;
     private String title;
     private String body;
     private int commentNum;
     private LocalDateTime createAt;
-    private User creator;
-    private List<User> executors;
+    private UserJson creator;
+    private List<UserJson> executors;
     private boolean isComplete;
     private LocalDateTime completeAt;
-    private User completer;
+    private UserJson completer;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -55,19 +59,19 @@ public class Task {
         this.createAt = createAt;
     }
 
-    public User getCreator() {
+    public UserJson getCreator() {
         return creator;
     }
 
-    public void setCreator(User creator) {
+    public void setCreator(UserJson creator) {
         this.creator = creator;
     }
 
-    public List<User> getExecutors() {
+    public List<UserJson> getExecutors() {
         return executors;
     }
 
-    public void setExecutors(List<User> executors) {
+    public void setExecutors(List<UserJson> executors) {
         this.executors = executors;
     }
 
@@ -87,11 +91,11 @@ public class Task {
         this.completeAt = completeAt;
     }
 
-    public User getCompleter() {
+    public UserJson getCompleter() {
         return completer;
     }
 
-    public void setCompleter(User completer) {
+    public void setCompleter(UserJson completer) {
         this.completer = completer;
     }
 

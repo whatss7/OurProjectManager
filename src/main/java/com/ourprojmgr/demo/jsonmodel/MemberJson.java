@@ -1,9 +1,13 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
 import java.time.LocalDateTime;
 
-public class Member {
-    private User user;
+/**
+ * 表示项目成员的 JSON
+ * @author 朱华彬
+ */
+public class MemberJson {
+    private UserJson user;
     private String role;
     private LocalDateTime joinAt;
 
@@ -11,11 +15,11 @@ public class Member {
     public static final String ROLE_ADMIN = "Admin";
     public static final String ROLE_MEMBER = "Member";
 
-    public User getUser() {
+    public UserJson getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserJson user) {
         this.user = user;
     }
 

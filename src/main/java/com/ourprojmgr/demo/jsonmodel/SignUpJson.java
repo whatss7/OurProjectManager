@@ -1,6 +1,10 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
-public class UserSignUpInfo {
+/**
+ * 表示注册消息的 JSON
+ * @author 朱华彬
+ */
+public class SignUpJson {
     private String username;
     private String nickname;
     private String password;

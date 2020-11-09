@@ -1,12 +1,16 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.jsonmodel;
 
 import java.time.LocalDateTime;
 
-public class Comment {
-    private long id;
+/**
+ * 表示评论的 JSON
+ * @author 朱华彬
+ */
+public class CommentJson {
+    private int id;
     private String body;
     private LocalDateTime createAt;
-    private User user;
+    private UserJson user;
 
     @Override
     public String toString() {
@@ -18,11 +22,11 @@ public class Comment {
                 '}';
     }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -42,11 +46,11 @@ public class Comment {
         this.createAt = createAt;
     }
 
-    public User getUser() {
+    public UserJson getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserJson user) {
         this.user = user;
     }
 }

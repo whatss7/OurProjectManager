@@ -1,23 +1,23 @@
-package com.ourprojmgr.demo.json;
+package com.ourprojmgr.demo.dbmodel;
 
 import java.time.LocalDateTime;
 
 /**
- * 用户
+ * 用户实体类
  */
 public class User {
-    private long id;
+    private int id;
     private String username;
     private String nickname;
-    private LocalDateTime createAt;
+    private String hashedPassword;
+    private String salt;
     private LocalDateTime updateAt;
-    private int projectCount;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -37,12 +37,20 @@ public class User {
         this.nickname = nickname;
     }
 
-    public LocalDateTime getCreateAt() {
-        return createAt;
+    public String getHashedPassword() {
+        return hashedPassword;
     }
 
-    public void setCreateAt(LocalDateTime createAt) {
-        this.createAt = createAt;
+    public void setHashedPassword(String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 
     public LocalDateTime getUpdateAt() {
@@ -53,23 +61,15 @@ public class User {
         this.updateAt = updateAt;
     }
 
-    public int getProjectCount() {
-        return projectCount;
-    }
-
-    public void setProjectCount(int projectCount) {
-        this.projectCount = projectCount;
-    }
-
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", nickname='" + nickname + '\'' +
-                ", createAt=" + createAt +
+                ", hashedPassword='" + hashedPassword + '\'' +
+                ", salt='" + salt + '\'' +
                 ", updateAt=" + updateAt +
-                ", projectCount=" + projectCount +
                 '}';
     }
 }
