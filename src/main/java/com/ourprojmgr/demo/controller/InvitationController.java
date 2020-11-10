@@ -7,11 +7,8 @@ import com.ourprojmgr.demo.dbmodel.Project;
 import com.ourprojmgr.demo.dbmodel.User;
 import com.ourprojmgr.demo.jsonmodel.ApiResponseJson;
 import com.ourprojmgr.demo.jsonmodel.InvitationJson;
-import com.ourprojmgr.demo.jsonmodel.ProjectJson;
-import com.ourprojmgr.demo.jsonmodel.UserJson;
 import com.ourprojmgr.demo.service.IProjectService;
 import com.ourprojmgr.demo.service.IUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,17 +72,26 @@ public class InvitationController {
             return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
         }
 
+        if (!projectService.isAdminOf(user, project)) {
+            //不是本项目的 Admin
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_PERMISSION_DENIED,
+                    "Not Admin"
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
+        }
+
         invitation = projectService.invitationToJson(
                 projectService.sendInvitation(user, receiver, project));
         return new ResponseEntity<>(invitation, HttpStatus.CREATED);
     }
 
     /**
-     * 获取项目中的邀请
+     * 获取项目中已发送的所有邀请
      *
      * @param projectId 项目 ID
      * @param user      当前用户
-     * @return 邀请列表
+     * @return 邀请列表 JSON
      * @author 朱华彬
      */
     @GetMapping
@@ -119,5 +125,119 @@ public class InvitationController {
     }
 
 
+    /**
+     * 获取某个邀请
+     *
+     * @param projectId 项目 ID
+     * @param id        邀请 ID
+     * @param user      当前用户
+     * @return 一个邀请 JSON
+     * @author 朱华彬
+     */
+    @GetMapping("/{id}")
+    @LoginRequired
+    public ResponseEntity<?> getInvitation(@PathVariable Integer projectId,
+                                           @PathVariable Integer id,
+                                           @CurrentUser User user) {
+        Project project = projectService.getProjectById(projectId);
+        if (project == null) {
+            //项目不存在
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_PROJECT_NOT_FOUND,
+                    "Project with id " + projectId + " not found."
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+        }
+
+        if (!projectService.isAdminOf(user, project)) {
+            //不是本项目的 Admin
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_PERMISSION_DENIED,
+                    "Not Admin"
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.FORBIDDEN);
+        }
+
+        Invitation invitation = projectService.getInvitationById(id);
+        if (invitation == null) {
+            //邀请不存在
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_INVITATION_NOT_FOUND,
+                    "Invitation with id " + id + "not found."
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+        }
+        InvitationJson json = projectService.invitationToJson(invitation);
+        return new ResponseEntity<>(json, HttpStatus.OK);
+    }
+
+    /**
+     * 取消邀请
+     *
+     * @param id   邀请 ID
+     * @param user 当前用户
+     * @author 朱华彬
+     */
+    @GetMapping("/{id}/canceled")
+    @LoginRequired
+    public ResponseEntity<?> cancelInvitation(@PathVariable Integer id, @CurrentUser User user) {
+        Invitation invitation = projectService.getInvitationById(id);
+        if (invitation == null) {
+            //邀请不存在
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_INVITATION_NOT_FOUND,
+                    "Invitation with id " + id + "not found."
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+        }
+        projectService.cancelInvitation(user, invitation);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 接受邀请
+     *
+     * @param id   邀请 ID
+     * @param user 当前用户
+     * @author 朱华彬
+     */
+    @GetMapping("/{id}/accept")
+    @LoginRequired
+    public ResponseEntity<?> acceptInvitation(@PathVariable Integer id, @CurrentUser User user) {
+        Invitation invitation = projectService.getInvitationById(id);
+        if (invitation == null) {
+            //邀请不存在
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_INVITATION_NOT_FOUND,
+                    "Invitation with id " + id + "not found."
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+        }
+        projectService.acceptInvitation(user, invitation);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 拒绝邀请
+     *
+     * @param id   邀请 ID
+     * @param user 当前用户
+     * @author 朱华彬
+     */
+    @GetMapping("/{id}/reject")
+    @LoginRequired
+    public ResponseEntity<?> rejectInvitation(@PathVariable Integer id, @CurrentUser User user) {
+        Invitation invitation = projectService.getInvitationById(id);
+        if (invitation == null) {
+            //邀请不存在
+            var apiResponse = new ApiResponseJson(
+                    ApiResponseJson.TYPE_INVITATION_NOT_FOUND,
+                    "Invitation with id " + id + "not found."
+            );
+            return new ResponseEntity<>(apiResponse, HttpStatus.NOT_FOUND);
+        }
+        projectService.rejectInvitation(user, invitation);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 
 }

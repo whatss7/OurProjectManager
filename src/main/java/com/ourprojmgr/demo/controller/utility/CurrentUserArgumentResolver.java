@@ -26,7 +26,10 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
      * 真正处理参数分解的地方，返回值作为方法上的参数
      */
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) throws Exception {
         return webRequest.getAttribute("currentUser", RequestAttributes.SCOPE_REQUEST);
     }
 }

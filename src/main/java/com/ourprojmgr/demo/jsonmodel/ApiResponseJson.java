@@ -61,11 +61,11 @@ public class ApiResponseJson {
     /**
      * 未登录
      */
-    public static final String TYPE_NOT_LOGIN="NotLogin";
+    public static final String TYPE_NOT_LOGIN = "NotLogin";
     /**
      * 没有权限
      */
-    public static final String TYPE_PERMISSION_DENIED="PermissionDenied";
+    public static final String TYPE_PERMISSION_DENIED = "PermissionDenied";
     /**
      * 项目不存在
      */
@@ -86,4 +86,16 @@ public class ApiResponseJson {
      * 未知错误
      */
     public static final String TYPE_UNKNOWN_ERROR = "UnknownError";
+    /**
+     * 邀请不存在
+     */
+    public static final String TYPE_INVITATION_NOT_FOUND = "InvitationNotFound";
+    /**
+     * 邀请已存在
+     */
+    public static final String TYPE_INVITATION_ALREADY_EXIST = "InvitationAlreadyExist";
+    /**
+     * 邀请接收者已在项目中
+     */
+    public static final String TYPE_RECEIVER_ALREADY_IN_PROJECT = "ReceiverAlreadyInProject";
 }

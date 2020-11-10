@@ -64,10 +64,24 @@ public interface IProjectService {
 
     /**
      * 按 ID 获取邀请
+     *
      * @param id 邀请的 ID
      * @return 若邀请不存在，则返回 null
      */
     Invitation getInvitationById(int id);
+
+    /**
+     * 接受邀请
+     * TODO 异常：user 非 receiver、invitation 状态
+     * @param user       接受该邀请的用户
+     * @param invitation 邀请
+     */
+    void acceptInvitation(User user, Invitation invitation);
+
+    void rejectInvitation(User user, Invitation invitation);
+
+    //TODO 异常：非 admin
+    void cancelInvitation(User user, Invitation invitation);
 
     //请自行添加其他方法
 }
