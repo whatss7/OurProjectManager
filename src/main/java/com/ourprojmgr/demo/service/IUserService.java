@@ -1,15 +1,34 @@
 package com.ourprojmgr.demo.service;
 
+import com.ourprojmgr.demo.dbmodel.Project;
 import com.ourprojmgr.demo.dbmodel.User;
 import com.ourprojmgr.demo.jsonmodel.UserJson;
+
+import java.util.List;
 
 /**
  * 与用户有关的业务逻辑
  */
 public interface IUserService {
+
+    /**
+     * 按照 ID 获取用户
+     * @param id 用户 ID
+     * @return User 实体类
+     */
     User getUserById(int id);
 
+    /**
+     * 按照用户名获取用户
+     * @param username 用户名
+     * @return User 实体类
+     */
     User getUserByName(String username);
+
+    /**
+     * 将 DB Model 的 User 转换为 JSON Model
+     */
+    UserJson userToJson(User user);
 
     /**
      * 更新密码
@@ -31,10 +50,16 @@ public interface IUserService {
     void updateUsernameAndNickname(User user, String newUsername, String newNickname);
 
     /**
-     * 获取用户参加的项目数量
+     * 获取该用户参加项目的数量
      * @param user 用户
      */
     int getProjectCount(User user);
+
+    /**
+     * 获取该用户参加的项目
+     * @param user 用户
+     */
+    List<Project> getUserProjects(User user);
 
     //请自行添加其他方法
 }

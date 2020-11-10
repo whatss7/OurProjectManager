@@ -1,4 +1,4 @@
-package com.ourprojmgr.demo.controller;
+package com.ourprojmgr.demo.controller.utility;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
@@ -20,7 +20,7 @@ import java.io.IOException;
  * @author 朱华彬
  */
 public class LoginInterceptor implements HandlerInterceptor {
-
+    //TODO di
     private IUserService userService;
 
     public void setUserService(IUserService userService) {

@@ -1,21 +1,15 @@
-package com.ourprojmgr.demo.jsonmodel;
+package com.ourprojmgr.demo.dbmodel;
 
 import java.time.LocalDateTime;
 
-/**
- * 表示邀请的 JSON
- *
- * @author 朱华彬
- */
-public class InvitationJson {
+public class Invitation {
     private int id;
     private LocalDateTime createAt;
     private LocalDateTime endAt;
     private String status;
-    private UserJson sender;
-    private UserJson receiver;
-
-    private ProjectJson project;
+    private int senderId;
+    private int receiverId;
+    private int projectId;
 
     /**
      * （项目管理员）已创建
@@ -24,7 +18,7 @@ public class InvitationJson {
     /**
      * （项目管理员）已取消
      */
-    public static final String STATUS_CANCELS = "canceled";
+    public static final String STATUS_CANCELED = "canceled";
     /**
      * （被邀请者） 已接受
      */
@@ -66,40 +60,43 @@ public class InvitationJson {
         this.status = status;
     }
 
-    public UserJson getSender() {
-        return sender;
+    public int getSenderId() {
+        return senderId;
     }
 
-    public void setSender(UserJson sender) {
-        this.sender = sender;
+    public void setSenderId(int senderId) {
+        this.senderId = senderId;
     }
 
-    public UserJson getReceiver() {
-        return receiver;
+    public int getReceiverId() {
+        return receiverId;
     }
 
-    public void setReceiver(UserJson receiver) {
-        this.receiver = receiver;
+    public void setReceiverId(int receiverId) {
+        this.receiverId = receiverId;
     }
 
-    public ProjectJson getProject() {
-        return project;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setProject(ProjectJson project) {
-        this.project = project;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
     }
 
-    @Override
-    public String toString() {
-        return "Invitation{" +
-                "id=" + id +
-                ", createAt=" + createAt +
-                ", endAt=" + endAt +
-                ", status='" + status + '\'' +
-                ", sender=" + sender +
-                ", receiver=" + receiver +
-                ", project='" + project + '\'' +
-                '}';
+    public static String getStatusCreated() {
+        return STATUS_CREATED;
+    }
+
+    public static String getStatusCanceled() {
+        return STATUS_CANCELED;
+    }
+
+    public static String getStatusAccepted() {
+        return STATUS_ACCEPTED;
+    }
+
+    public static String getStatusRejected() {
+        return STATUS_REJECTED;
     }
 }

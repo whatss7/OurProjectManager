@@ -1,7 +1,7 @@
 package com.ourprojmgr.demo;
 
-import com.ourprojmgr.demo.controller.LoginInterceptor;
-import com.ourprojmgr.demo.controller.CurrentUserArgumentResolver;
+import com.ourprojmgr.demo.controller.utility.LoginInterceptor;
+import com.ourprojmgr.demo.controller.utility.CurrentUserArgumentResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

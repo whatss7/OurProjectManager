@@ -1,4 +1,4 @@
-package com.ourprojmgr.demo.controller;
+package com.ourprojmgr.demo.controller.utility;
 
 import com.ourprojmgr.demo.dbmodel.User;
 import org.springframework.core.MethodParameter;

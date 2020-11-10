@@ -1,4 +1,4 @@
-package com.ourprojmgr.demo.controller;
+package com.ourprojmgr.demo.controller.utility;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

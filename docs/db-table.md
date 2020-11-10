@@ -6,6 +6,7 @@
 | nickname       | 用户昵称     |
 | hashedPassword | 哈希后的密码 |
 | salt           | 盐           |
+| createAt       | 注册时间     |
 | updateAt       | 更新时间     |
 
 ```sql
@@ -15,6 +16,7 @@ CREATE TABLE User(
     nickname VARCHAR(255) NOT NULL, -- 用户昵称
     hashedPassword VARCHAR(255) NOT NULL, -- 哈希后的密码
     salt VARCHAR(255) NOT NULL, -- 盐
+    createAt Date, -- 注册时间
     updateAt Date, -- 更新时间
     PRIMARY KEY(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -84,3 +86,4 @@ CREATE TABLE User(
 | status     | 状态          |
 | senderId   | 发送者用户 ID |
 | receiverId | 接收者用户 ID |
+| projectId  | 项目 ID       |
