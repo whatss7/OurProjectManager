@@ -13,6 +13,7 @@ public interface IUserService {
 
     /**
      * 按照 ID 获取用户
+     *
      * @param id 用户 ID
      * @return User 实体类
      */
@@ -20,6 +21,7 @@ public interface IUserService {
 
     /**
      * 按照用户名获取用户
+     *
      * @param username 用户名
      * @return User 实体类
      */
@@ -32,31 +34,36 @@ public interface IUserService {
 
     /**
      * 更新密码
-     * TODO 在方法中校验旧密码是否正确
-     * @param user 用户
+     *
+     * @param user        用户
      * @param oldPassword 旧密码
      * @param newPassword 新密码
+     * @throws com.ourprojmgr.demo.exception.BusinessException 若旧密码不正确，则抛异常
      */
     void updatePassword(User user, String oldPassword, String newPassword);
 
     /**
      * 更新用户名和昵称。
-     * 新用户名和新昵称可以与原来的相同。
-     * TODO 在方法中校验新用户名是否已被别人使用
-     * @param user 用户
+     * <p/>
+     * 注：newUsername 和 newNickname 可以与原来的相同。
+     *
+     * @param user        用户
      * @param newUsername 新用户名
      * @param newNickname 新昵称
+     * @throws com.ourprojmgr.demo.exception.BusinessException 若 newUsername 已被他人使用，则抛异常
      */
     void updateUsernameAndNickname(User user, String newUsername, String newNickname);
 
     /**
      * 获取该用户参加项目的数量
+     *
      * @param user 用户
      */
     int getProjectCount(User user);
 
     /**
      * 获取该用户参加的项目
+     *
      * @param user 用户
      */
     List<Project> getUserProjects(User user);

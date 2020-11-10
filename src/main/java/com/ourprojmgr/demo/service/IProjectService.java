@@ -42,27 +42,6 @@ public interface IProjectService {
     boolean isMemberOf(User user, Project project);
 
     /**
-     * 发送邀请
-     * TODO 抛异常：sender 不是 admin、receiver 已在项目中、邀请已存在
-     *
-     * @param sender   发送者
-     * @param Receiver 接收者
-     * @param project  邀请加入的项目
-     * @return Invitation 实体类
-     */
-    Invitation sendInvitation(User sender, User Receiver, Project project);
-
-    /**
-     * 将 DB Model 的 Invitation 转换为 JSON Model
-     */
-    InvitationJson invitationToJson(Invitation invitation);
-
-    /**
-     * 获取项目中所有的邀请
-     */
-    List<Invitation> getInvitations(Project project);
-
-    /**
      * 按 ID 获取邀请
      *
      * @param id 邀请的 ID
@@ -71,17 +50,69 @@ public interface IProjectService {
     Invitation getInvitationById(int id);
 
     /**
+     * 将 DB Model 的 Invitation 转换为 JSON Model
+     */
+    InvitationJson invitationToJson(Invitation invitation);
+
+    /**
+     * 发送邀请
+     *
+     * @param sender   发送者
+     * @param Receiver 接收者
+     * @param project  邀请加入的项目
+     * @return Invitation 实体类
+     * @throws com.ourprojmgr.demo.exception.BusinessException 出现以下几种错误则抛异常：
+     *                                                         <ol>
+     *                                                             <li>sender 不是 admin</li>
+     *                                                             <li>receiver 已在项目中</li>
+     *                                                             <li>相同的邀请已存在（根据 sender、receiver、project 判断）</li>
+     *                                                         </ol>
+     */
+    Invitation sendInvitation(User sender, User Receiver, Project project);
+
+    /**
+     * 获取项目中所有的邀请
+     */
+    List<Invitation> getInvitations(Project project);
+
+    /**
      * 接受邀请
-     * TODO 异常：user 非 receiver、invitation 状态
-     * @param user       接受该邀请的用户
+     *
+     * @param user       邀请的收件人
      * @param invitation 邀请
+     * @throws com.ourprojmgr.demo.exception.BusinessException 出现以下几种错误则抛异常：
+     *                                                         <ol>
+     *                                                             <li>user 并非该邀请的 receiver</li>
+     *                                                             <li>邀请的状态并非 created</li>
+     *                                                         </ol>
      */
     void acceptInvitation(User user, Invitation invitation);
 
+    /**
+     * 拒绝邀请
+     *
+     * @param user       邀请的收件人
+     * @param invitation 邀请
+     * @throws com.ourprojmgr.demo.exception.BusinessException 出现以下几种错误则抛异常：
+     *                                                         <ol>
+     *                                                             <li>user 并非该邀请的 receiver</li>
+     *                                                             <li>邀请的状态并非 created</li>
+     *                                                         </ol>
+     */
     void rejectInvitation(User user, Invitation invitation);
 
-    //TODO 异常：非 admin
-    void cancelInvitation(User user, Invitation invitation);
+    /**
+     * 取消邀请
+     *
+     * @param admin      项目管理员
+     * @param invitation 邀请
+     * @throws com.ourprojmgr.demo.exception.BusinessException 出现以下几种情况则抛异常：
+     *                                                         <ol>
+     *                                                             <li>用户并非项目的 Admin</li>
+     *                                                             <li>邀请的状态并非 created</li>
+     *                                                         </ol>
+     */
+    void cancelInvitation(User admin, Invitation invitation);
 
     //请自行添加其他方法
 }

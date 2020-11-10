@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ourprojmgr.demo.dbmodel.User;
+import com.ourprojmgr.demo.exception.BusinessErrorType;
 import com.ourprojmgr.demo.jsonmodel.ApiResponseJson;
 import com.ourprojmgr.demo.service.IUserService;
 import org.springframework.http.HttpStatus;
@@ -44,16 +45,17 @@ public class LoginInterceptor implements HandlerInterceptor {
             if (token == null) {
                 //无 token
                 ApiResponseJson apiResponse = new ApiResponseJson(
-                        ApiResponseJson.TYPE_NOT_LOGIN, "There is no token.");
-                setApiResponse(response, HttpStatus.UNAUTHORIZED, apiResponse); //HTTP 401 Unauthorized
+                        BusinessErrorType.NOT_LOGIN.getType(),
+                        "There is no token.");
+                setApiResponse(response, BusinessErrorType.NOT_LOGIN.getStatus(), apiResponse);
                 return false;
             }
             User user = getUserByToken(token);
             if (user == null) {
                 //token 非法或用户不存在
                 ApiResponseJson apiResponse = new ApiResponseJson(
-                        ApiResponseJson.TYPE_NOT_LOGIN, "Invalid token or user not exist");
-                setApiResponse(response, HttpStatus.UNAUTHORIZED, apiResponse); //HTTP 401 Unauthorized
+                        BusinessErrorType.NOT_LOGIN.getType(), "Invalid token or user not exist");
+                setApiResponse(response, BusinessErrorType.NOT_LOGIN.getStatus(), apiResponse); //HTTP 401 Unauthorized
                 return false;
             }
             //将获取的 User 存到 HttpServletRequest 的 Attribute 中，
