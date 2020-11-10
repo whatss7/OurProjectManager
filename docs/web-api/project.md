@@ -126,6 +126,9 @@
   - [应答](#应答-17)
     - [发送邀请成功](#发送邀请成功)
     - [项目不存在](#项目不存在-6)
+    - [用户不存在](#用户不存在)
+    - [邀请已存在](#邀请已存在)
+    - [接收者已在项目中](#接收者已在项目中)
     - [无 token 或 token 无效](#无-token-或-token-无效-16)
     - [不是本项目的 Admin](#不是本项目的-admin-4)
 - [GET /api/projects/{projectId}/invitations 获取本项目中已发送的邀请](#get-apiprojectsprojectidinvitations-获取本项目中已发送的邀请)
@@ -610,6 +613,38 @@ HTTP 201 Created。
 返回 Invitation 对象。
 
 ### 项目不存在
+### 用户不存在
+指接收者不存在。
+
+HTTP 404 Not Found
+
+```json
+{
+    "type": "UserNotFound",
+    "message": "..."
+}
+```
+
+### 邀请已存在
+HTTP 409 Conflict
+
+```json
+{
+    "type": "InvitationAlreadyExist",
+    "message": "..."
+}
+```
+
+### 接收者已在项目中
+HTTP 409 Conflict
+
+```json
+{
+    "type": "ReceiverAlreadyInProject",
+    "message": "..."
+}
+```
+
 ### 无 token 或 token 无效
 ### 不是本项目的 Admin
 
