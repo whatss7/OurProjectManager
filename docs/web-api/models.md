@@ -382,3 +382,4 @@
 | 未知错误             | UnknownError             | 500 Internal Server Error |
 | 邀请已存在           | InvitationAlreadyExist   | 409 Conflict              |
 | 邀请接收者已在项目中 | ReceiverAlreadyInProject | 409 Conflict              |
+| 邀请不存在           | InvitationNotFound       | 404 Not Found             |

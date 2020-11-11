@@ -10,6 +10,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 /**
  * 参数分解器，将请求头中的 token 转化为 User 对象
+ *
  * @author 朱华彬
  */
 public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolver {
@@ -26,7 +27,10 @@ public class CurrentUserArgumentResolver implements HandlerMethodArgumentResolve
      * 真正处理参数分解的地方，返回值作为方法上的参数
      */
     @Override
-    public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
+    public Object resolveArgument(MethodParameter parameter,
+                                  ModelAndViewContainer mavContainer,
+                                  NativeWebRequest webRequest,
+                                  WebDataBinderFactory binderFactory) throws Exception {
         return webRequest.getAttribute("currentUser", RequestAttributes.SCOPE_REQUEST);
     }
 }
