@@ -1,5 +1,5 @@
 # 数据库名
-TODO name
+OurProjectManagerDb
 
 # Users 表
 | 字段           | 说明         |
