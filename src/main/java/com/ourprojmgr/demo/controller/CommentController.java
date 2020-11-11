@@ -6,18 +6,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 处理与项目有关的请求
+ * 处理与评论有关的请求
  *
- * @author 谢可睿
+ * @author 董晓艺
  */
 @RestController
-@RequestMapping("/api/projects")
-public class ProjectController {
+@RequestMapping("/api/projects/{projectId}/tasks/{taskId}/comments")
+public class CommentController {
 
     private final IProjectService projectService;
 
     @Autowired
-    public ProjectController(IProjectService projectService) {
+    public CommentController(IProjectService projectService) {
         this.projectService = projectService;
     }
 

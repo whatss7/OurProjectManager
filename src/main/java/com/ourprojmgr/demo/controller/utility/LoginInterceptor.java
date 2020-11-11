@@ -45,7 +45,7 @@ public class LoginInterceptor implements HandlerInterceptor {
         //若无该注解，则直接放行
         if (handlerMethod.hasMethodAnnotation(LoginRequired.class)) {
             String token = getTokenFromAuthorization(request.getHeader("Authorization"));
-            System.out.println(token);
+            //System.out.println(token);
             if (token == null) {
                 //无 token
                 ApiResponseJson apiResponse = new ApiResponseJson(
