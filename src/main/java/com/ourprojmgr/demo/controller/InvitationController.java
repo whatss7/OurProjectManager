@@ -19,7 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 处理与邀请有关的 API
+ * 处理与邀请有关的请求
+ *
+ * @author 朱华彬
  */
 @RestController
 @RequestMapping("/api/projects/{projectId}/invitations")
@@ -123,7 +125,7 @@ public class InvitationController {
      */
     @GetMapping("/{id}/canceled")
     @LoginRequired
-    public ResponseEntity<?> cancelInvitation(@PathVariable Integer id,
+    public ResponseEntity<Void> cancelInvitation(@PathVariable Integer id,
                                               @CurrentUser User user) {
         Invitation invitation = getInvitationOrThrow(id);
         projectService.cancelInvitation(user, invitation);
@@ -140,7 +142,7 @@ public class InvitationController {
      */
     @GetMapping("/{id}/accept")
     @LoginRequired
-    public ResponseEntity<?> acceptInvitation(@PathVariable Integer id,
+    public ResponseEntity<Void> acceptInvitation(@PathVariable Integer id,
                                               @CurrentUser User user) {
         Invitation invitation = getInvitationOrThrow(id);
         projectService.acceptInvitation(user, invitation);
@@ -157,12 +159,14 @@ public class InvitationController {
      */
     @GetMapping("/{id}/reject")
     @LoginRequired
-    public ResponseEntity<?> rejectInvitation(@PathVariable Integer id,
+    public ResponseEntity<Void> rejectInvitation(@PathVariable Integer id,
                                               @CurrentUser User user) {
         Invitation invitation = getInvitationOrThrow(id);
         projectService.rejectInvitation(user, invitation);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    // ---------------------- 以下为辅助方法 ----------------------
 
     /**
      * 获取 Invitation，若不存在则抛异常

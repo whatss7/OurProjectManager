@@ -9,7 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 
 /**
- * 负责处理用户相关请求的控制器
+ * 处理用户有关的请求
+ *
+ * @author 董晓艺
  */
 @RestController
 @RequestMapping("/api/users")
@@ -23,13 +25,13 @@ public class UserController {
     }
 
     /**
-     * 登出
+     * 登出，暂时先这么简单处理吧
      *
      * @author 朱华彬
      */
     @GetMapping("/logout")
     @LoginRequired
-    public ResponseEntity<?> logout() {
+    public ResponseEntity<Void> logout() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
