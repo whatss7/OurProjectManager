@@ -1,9 +1,9 @@
-- [POST /api/user/login 登录](#post-apiuserlogin-登录)
+- [POST /api/users/login 登录](#post-apiuserslogin-登录)
   - [请求体](#请求体)
   - [应答](#应答)
     - [登录成功](#登录成功)
     - [密码或用户名不正确](#密码或用户名不正确)
-- [GET /api/user/logout 登出](#get-apiuserlogout-登出)
+- [GET /api/users/logout 登出](#get-apiuserslogout-登出)
   - [请求头](#请求头)
   - [应答](#应答-1)
     - [登出成功](#登出成功)
@@ -92,7 +92,7 @@
     - [无 token 或 token 非法](#无-token-或-token-非法-9)
     - [操作者不是对应的用户](#操作者不是对应的用户-7)
 
-# POST /api/user/login 登录
+# POST /api/users/login 登录
 ## 请求体
 一个 UserLoginInfo。
 
@@ -125,7 +125,7 @@ HTTP 401 Unauthorized
 }
 ```
 
-# GET /api/user/logout 登出
+# GET /api/users/logout 登出
 已登录的用户才能登出。
 
 ## 请求头
