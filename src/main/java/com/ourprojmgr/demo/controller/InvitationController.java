@@ -10,6 +10,7 @@ import com.ourprojmgr.demo.exception.BusinessException;
 import com.ourprojmgr.demo.jsonmodel.InvitationJson;
 import com.ourprojmgr.demo.service.IProjectService;
 import com.ourprojmgr.demo.service.IUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -23,17 +24,14 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/projects/{projectId}/invitations")
 public class InvitationController {
-    //TODO di
-    private IUserService userService;
 
-    public void setUserService(IUserService userService) {
+    private final IUserService userService;
+    private final IProjectService projectService;
+
+    @Autowired
+    public InvitationController(IUserService userService,
+                                IProjectService projectService) {
         this.userService = userService;
-    }
-
-    //TODO di
-    private IProjectService projectService;
-
-    public void setProjectService(IProjectService projectService) {
         this.projectService = projectService;
     }
 
@@ -49,7 +47,7 @@ public class InvitationController {
      */
     @PostMapping
     @LoginRequired
-    public ResponseEntity<?> sendInvitations(
+    public ResponseEntity<InvitationJson> sendInvitations(
             @PathVariable Integer projectId,
             @RequestBody InvitationJson invitation,
             @CurrentUser User user) {
@@ -72,14 +70,15 @@ public class InvitationController {
      *
      * @param projectId 项目 ID
      * @param user      当前用户
-     * @return 邀请列表 JSON
+     * @return 邀请列表
      * @throws BusinessException 业务异常
      * @author 朱华彬
      */
     @GetMapping
     @LoginRequired
-    public ResponseEntity<?> getInvitations(@PathVariable Integer projectId,
-                                            @CurrentUser User user) {
+    public ResponseEntity<List<InvitationJson>> getInvitations(
+            @PathVariable Integer projectId,
+            @CurrentUser User user) {
         Project project = getProjectOrThrow(projectId);
         checkAdminOrThrow(user, project);
         List<InvitationJson> jsonList = new ArrayList<>();
@@ -102,9 +101,10 @@ public class InvitationController {
      */
     @GetMapping("/{id}")
     @LoginRequired
-    public ResponseEntity<?> getInvitation(@PathVariable Integer projectId,
-                                           @PathVariable Integer id,
-                                           @CurrentUser User user) {
+    public ResponseEntity<InvitationJson> getInvitation(
+            @PathVariable Integer projectId,
+            @PathVariable Integer id,
+            @CurrentUser User user) {
         Project project = getProjectOrThrow(projectId);
         checkAdminOrThrow(user, project);
         Invitation invitation = getInvitationOrThrow(id);
@@ -117,12 +117,14 @@ public class InvitationController {
      *
      * @param id   邀请 ID
      * @param user 当前用户
+     * @return 若成功则返回 HTTP 200 OK
      * @throws BusinessException 业务异常
      * @author 朱华彬
      */
     @GetMapping("/{id}/canceled")
     @LoginRequired
-    public ResponseEntity<?> cancelInvitation(@PathVariable Integer id, @CurrentUser User user) {
+    public ResponseEntity<?> cancelInvitation(@PathVariable Integer id,
+                                              @CurrentUser User user) {
         Invitation invitation = getInvitationOrThrow(id);
         projectService.cancelInvitation(user, invitation);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -133,11 +135,13 @@ public class InvitationController {
      *
      * @param id   邀请 ID
      * @param user 当前用户
+     * @return 若成功则返回 HTTP 200 OK
      * @author 朱华彬
      */
     @GetMapping("/{id}/accept")
     @LoginRequired
-    public ResponseEntity<?> acceptInvitation(@PathVariable Integer id, @CurrentUser User user) {
+    public ResponseEntity<?> acceptInvitation(@PathVariable Integer id,
+                                              @CurrentUser User user) {
         Invitation invitation = getInvitationOrThrow(id);
         projectService.acceptInvitation(user, invitation);
         return new ResponseEntity<>(HttpStatus.OK);
@@ -148,11 +152,13 @@ public class InvitationController {
      *
      * @param id   邀请 ID
      * @param user 当前用户
+     * @return 若成功则返回 HTTP 200 OK
      * @author 朱华彬
      */
     @GetMapping("/{id}/reject")
     @LoginRequired
-    public ResponseEntity<?> rejectInvitation(@PathVariable Integer id, @CurrentUser User user) {
+    public ResponseEntity<?> rejectInvitation(@PathVariable Integer id,
+                                              @CurrentUser User user) {
         Invitation invitation = getInvitationOrThrow(id);
         projectService.rejectInvitation(user, invitation);
         return new ResponseEntity<>(HttpStatus.OK);

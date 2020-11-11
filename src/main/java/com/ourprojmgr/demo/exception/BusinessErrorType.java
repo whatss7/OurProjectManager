@@ -3,9 +3,11 @@ package com.ourprojmgr.demo.exception;
 import org.springframework.http.HttpStatus;
 
 /**
- * 业务错误枚举类，包含错误类型、HTTP 响应代码两个部分
+ * 业务错误枚举类，包含 type、HTTP 响应代码两个部分
  */
 public enum BusinessErrorType {
+    //注：如有必要，请在 BusinessErrorType 中添加新的错误类型
+
     /**
      * 用户名或密码错误
      */
