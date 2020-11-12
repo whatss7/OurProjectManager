@@ -5,11 +5,13 @@ import java.util.List;
 
 /**
  * 表示项目的 JSON
+ *
  * @author 朱华彬
  */
 public class ProjectJson {
     private int id;
     private String name;
+    private String description;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
     private UserJson superAdmin;
@@ -29,6 +31,14 @@ public class ProjectJson {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public LocalDateTime getCreateAt() {

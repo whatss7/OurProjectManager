@@ -99,4 +99,18 @@ public class Invitation {
     public static String getStatusRejected() {
         return STATUS_REJECTED;
     }
+
+    @Override
+    public String toString() {
+        return "Invitation{" +
+                "id=" + id +
+                ", createAt=" + createAt +
+                ", endAt=" + endAt +
+                ", status='" + status + '\'' +
+                ", senderId=" + senderId +
+                ", receiverId=" + receiverId +
+                ", projectId=" + projectId +
+                '}';
+    }
+
 }

@@ -37,12 +37,13 @@ CREATE TABLE User(
 | receiverId | 接收者用户 ID |
 
 # Projects 表
-| 字段     | 说明     |
-| -------- | -------- |
-| id       | 项目 ID  |
-| name     | 项目名称 |
-| createAt | 创建时间 |
-| updateAt | 更新时间 |
+| 字段        | 说明     |
+| ----------- | -------- |
+| id          | 项目 ID  |
+| name        | 项目名称 |
+| description | 项目描述 |
+| createAt    | 创建时间 |
+| updateAt    | 更新时间 |
 
 # Members 表
 | 字段      | 说明               |
