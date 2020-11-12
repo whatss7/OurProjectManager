@@ -4,11 +4,11 @@
   - [应答](#应答)
     - [创建项目成功](#创建项目成功)
     - [无 token 或 token 无效](#无-token-或-token-无效)
-- [GET /api/projects/{id} 获取项目信息](#get-apiprojectsid-获取项目信息)
+- [GET /api/projects/{id} 获取项目](#get-apiprojectsid-获取项目)
   - [应答](#应答-1)
     - [获取项目信息成功](#获取项目信息成功)
     - [项目不存在](#项目不存在)
-- [PATCH /api/projects/{id} 修改项目名称](#patch-apiprojectsid-修改项目名称)
+- [PATCH /api/projects/{id} 修改项目名称或描述](#patch-apiprojectsid-修改项目名称或描述)
   - [请求头](#请求头-1)
   - [请求体](#请求体-1)
   - [应答](#应答-2)
@@ -192,7 +192,7 @@ HTTP 401 Unauthorized
 }
 ```
 
-# GET /api/projects/{id} 获取项目信息
+# GET /api/projects/{id} 获取项目
 无请求头、无请求体。
 
 ## 应答
@@ -213,14 +213,14 @@ HTTP 404 Not Found
 }
 ```
 
-# PATCH /api/projects/{id} 修改项目名称
-本项目 Admin 及以上才能修改项目名称。
+# PATCH /api/projects/{id} 修改项目名称或描述
+本项目 Admin 及以上才能修改项目信息。
 
 ## 请求头
 需要在 Authorization 头信息中包含 token。
 
 ## 请求体
-一个 Project 对象，只使用 name 字段。
+一个 Project 对象，只使用 name 和 description 字段。
 
 ## 应答
 ### 修改成功

@@ -126,6 +126,7 @@
 {
     "id": 500,
     "name": "string",
+    "description": "string",
     "createAt": "string",
     "updateAt": "string",
     "superAdmin": {
@@ -163,6 +164,7 @@
 
 1. id - 项目 ID
 1. name - 名称
+1. description - 描述
 1. createAt - 创建时间
 1. updateAt - 更新时间
 1. superAdmin - 项目主管，一个 User 对象
