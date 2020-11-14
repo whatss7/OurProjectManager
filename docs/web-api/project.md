@@ -498,7 +498,7 @@ HTTP 200 OK。
 需要在 Authorization 头信息中包含 token。
 
 ## 请求体
-一个 Task 对象，只使用 isComplete 字段。
+一个 Task 对象，只使用 complete 字段。
 
 ## 应答
 ### 更新完成状态成功

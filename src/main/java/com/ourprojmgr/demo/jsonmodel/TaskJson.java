@@ -15,7 +15,7 @@ public class TaskJson {
     private LocalDateTime createAt;
     private UserJson creator;
     private List<UserJson> executors;
-    private boolean isComplete;
+    private boolean complete;
     private LocalDateTime completeAt;
     private UserJson completer;
 
@@ -76,11 +76,11 @@ public class TaskJson {
     }
 
     public boolean isComplete() {
-        return isComplete;
+        return complete;
     }
 
     public void setComplete(boolean complete) {
-        isComplete = complete;
+        this.complete = complete;
     }
 
     public LocalDateTime getCompleteAt() {
@@ -109,7 +109,7 @@ public class TaskJson {
                 ", createAt=" + createAt +
                 ", creator=" + creator +
                 ", executors=" + executors +
-                ", isComplete=" + isComplete +
+                ", isComplete=" + complete +
                 ", completeAt=" + completeAt +
                 ", completer=" + completer +
                 '}';

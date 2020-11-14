@@ -460,7 +460,7 @@ HTTP 403 Forbidden
 需要在 Authorization 头信息中包含 token。
 
 ## 请求体
-一个 Notification 对象，只使用 isRead 字段。
+一个 Notification 对象，只使用 read 字段。
 
 ## 应答
 ### 修改已读状态成功

@@ -29,7 +29,7 @@ CREATE TABLE User(
 | 字段       | 说明          |
 | ---------- | ------------- |
 | id         | 通知 ID       |
-| isRead     | 是否已读      |
+| read       | 是否已读      |
 | title      | 通知标题      |
 | body       | 通知内容      |
 | createAt   | 创建时间      |
@@ -62,7 +62,7 @@ CREATE TABLE User(
 | body        | 任务内容      |
 | createAt    | 创建时间      |
 | creatorId   | 创建者用户 ID |
-| isComplete  | 是否完成      |
+| complete    | 是否完成      |
 | completeAt  | 完成时间      |
 | completerId | 完成者用户 ID |
 

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  */
 public class NotificationJson {
     private int id;
-    private boolean isRead;
+    private boolean read;
     private String title;
     private String body;
     private LocalDateTime createAt;
@@ -24,11 +24,11 @@ public class NotificationJson {
     }
 
     public boolean isRead() {
-        return isRead;
+        return read;
     }
 
     public void setRead(boolean read) {
-        isRead = read;
+        this.read = read;
     }
 
     public String getTitle() {
@@ -75,7 +75,7 @@ public class NotificationJson {
     public String toString() {
         return "Notification{" +
                 "id=" + id +
-                ", isRead=" + isRead +
+                ", isRead=" + read +
                 ", title='" + title + '\'' +
                 ", body='" + body + '\'' +
                 ", createAt=" + createAt +

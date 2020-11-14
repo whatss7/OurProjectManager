@@ -14,7 +14,6 @@ public class InvitationJson {
     private String status;
     private UserJson sender;
     private UserJson receiver;
-
     private ProjectJson project;
 
     /**
