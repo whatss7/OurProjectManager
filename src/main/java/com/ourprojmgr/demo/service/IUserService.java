@@ -1,7 +1,9 @@
 package com.ourprojmgr.demo.service;
 
-import com.ourprojmgr.demo.dbmodel.Project;
+import com.ourprojmgr.demo.dbmodel.Notification;
 import com.ourprojmgr.demo.dbmodel.User;
+import com.ourprojmgr.demo.jsonmodel.NotificationJson;
+import com.ourprojmgr.demo.jsonmodel.ProjectJson;
 import com.ourprojmgr.demo.jsonmodel.UserJson;
 
 import java.util.List;
@@ -66,7 +68,93 @@ public interface IUserService {
      *
      * @param user 用户
      */
-    List<Project> getUserProjects(User user);
+    List<ProjectJson> getUserProjectJsons(User user);
+
+    /**
+     * 保存用户
+     *
+     * @param user 用户
+     */
+    void saveUser(User user);
+
+    /**
+     * 生成并设置用户的盐值，再根据盐值生成并设置用户的哈希密码
+     * @param user 用户
+     * @param password 原始密码
+     */
+    void hashPasswordAndSet(User user, String password);
+
+    /**
+     * 检查原始密码是否正确
+     * @param user 用户
+     * @param password 原始密码
+     * @return
+     */
+    boolean isRightPassword(User user, String password);
+
+    /**
+     * 删除用户
+     * @param user 用户
+     */
+    void deleteUser(User user);
+
+    /**
+     * 获取该用户参与的某个项目
+     * @param user 用户
+     * @param projectId 项目id
+     * @return ProjectJson 项目Json
+     */
+    ProjectJson getUserProjectJson(User user, Integer projectId);
+
+    /**
+     * 获取该用户收到的通知
+     * @param user 用户
+     * @return List<NotificationJson> 用户收到的所有通知
+     */
+    List<NotificationJson> getUserRecvNotificationJsons(User user);
+
+    /**
+     * 获取该用户收到的某条通知
+     * @param user 用户
+     * @param notificationId 通知id
+     * @return NotificationJson 通知Json
+     */
+    NotificationJson getUserRecvNotificationJson(User user, Integer notificationId);
+
+    /**
+     * 获取该用户发送的通知
+     * @param user 用户
+     * @return List<NotificationJson> 用户发送的所有通知
+     */
+    List<NotificationJson> getUserSendNotificationJsons(User user);
+
+    /**
+     * 获取该用户发送的某条通知
+     * @param user 用户
+     * @param notificationId 通知id
+     * @return NotificationJson 通知Json
+     */
+    NotificationJson getUserSendNotificationJson(User user, Integer notificationId);
+
+    /**
+     * 获取该用户发送的某条通知
+     * @param user 用户
+     * @param notificationId 通知id
+     * @return Notification 通知
+     */
+    Notification getUserRecvNotification(User user, Integer notificationId);
+
+    /**
+     * 更新通知
+     * @param notification 新通知
+     */
+    void updateNotification(Notification notification);
+
+    /**
+     * 保存通知
+     * @param notification 新通知
+     */
+    void saveNotification(Notification notification);
 
     //请自行添加其他方法
 }

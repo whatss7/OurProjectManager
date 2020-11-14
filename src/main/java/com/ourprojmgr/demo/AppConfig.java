@@ -2,6 +2,7 @@ package com.ourprojmgr.demo;
 
 import com.ourprojmgr.demo.controller.utility.LoginInterceptor;
 import com.ourprojmgr.demo.controller.utility.CurrentUserArgumentResolver;
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -11,6 +12,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
+@MapperScan("com.ourprojmgr.demo.dao")
 public class AppConfig implements WebMvcConfigurer {
     /**
      * 配置拦截器

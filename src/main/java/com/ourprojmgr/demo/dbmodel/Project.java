@@ -2,18 +2,34 @@ package com.ourprojmgr.demo.dbmodel;
 
 import java.time.LocalDateTime;
 
+<<<<<<< Updated upstream
 public class Project {
     private int id;
+=======
+/**
+ * 项目实体类
+ */
+public class Project {
+    private Integer id;
+>>>>>>> Stashed changes
     private String name;
     private String description;
     private LocalDateTime createAt;
     private LocalDateTime updateAt;
 
+<<<<<<< Updated upstream
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
+=======
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+>>>>>>> Stashed changes
         this.id = id;
     }
 
@@ -59,5 +75,8 @@ public class Project {
                 ", updateAt=" + updateAt +
                 '}';
     }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 }
