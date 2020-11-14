@@ -86,7 +86,7 @@
 ```json
 {
     "id": 500,
-    "isRead": false,
+    "read": false,
     "title": "string",
     "body": "string",
     "createAt": "string",
@@ -114,7 +114,7 @@
 属性：
 
 1. id - 通知 ID
-1. isRead - 是否已读
+1. read - 是否已读
 1. title - 通知标题
 1. body - 通知详情
 1. createAt - 发送时间
@@ -238,7 +238,7 @@
             "projectCount": 10
         }
     ],
-    "isComplete": false,
+    "complete": false,
     "completeAt": "string",
     "completer": {
         "id": 5001,
@@ -263,7 +263,7 @@
 1. creator - 创建者，一个 User 对象
 1. executors - 执行人，一个 User 数组
     - 若未分配执行人则为空数组 `[]`
-1. isComplete - 是否已完成
+1. complete - 是否已完成
 1. completeAt - 完成时间
     - 若未完成则为 null
 1. completer - 完成者，一个 User 对象
