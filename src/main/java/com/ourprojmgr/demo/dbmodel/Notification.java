@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
  * 通知实体类
  */
 public class Notification {
-    private Integer id;
+    private int id;
     private boolean read;
     private String title;
     private String body;
@@ -14,11 +14,11 @@ public class Notification {
     private Integer senderId;
     private Integer receiverId;
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
