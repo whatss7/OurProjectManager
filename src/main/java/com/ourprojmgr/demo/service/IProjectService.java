@@ -1,8 +1,7 @@
 package com.ourprojmgr.demo.service;
 
-import com.ourprojmgr.demo.dbmodel.Invitation;
-import com.ourprojmgr.demo.dbmodel.Project;
-import com.ourprojmgr.demo.dbmodel.User;
+import com.ourprojmgr.demo.dbmodel.*;
+import com.ourprojmgr.demo.jsonmodel.CommentJson;
 import com.ourprojmgr.demo.jsonmodel.InvitationJson;
 import com.ourprojmgr.demo.jsonmodel.ProjectJson;
 
@@ -113,6 +112,45 @@ public interface IProjectService {
      *                                                         </ol>
      */
     void cancelInvitation(User admin, Invitation invitation);
+
+    /**
+     * 获取某项任务下的所有评论
+     * @param taskId 任务id
+     * @return List<Comment> 任务下的所有评论
+     */
+    List<Comment> getTaskComments(int taskId);
+
+    /**
+     * 按照id获取任务
+     * @param taskId 任务id
+     * @return Task 任务
+     */
+    Task getTaskById(int taskId);
+
+    /**
+     * 获取某项任务下的某条评论
+     * @param taskId 任务id
+     * @param commentId 评论id
+     * @return Comment 评论
+     */
+    Comment getTaskComment(int taskId, int commentId);
+
+    /**
+     * 保存评论
+     * @param comment 新评论
+     */
+    void saveComment(Comment comment);
+
+    /**
+     * 删除评论
+     * @param commentId 评论id
+     */
+    void deleteComment(int commentId);
+
+    /**
+     * 将 DB Model 的 Comment 转换为 JSON Model
+     */
+    CommentJson commentToJson(Comment comment);
 
     //请自行添加其他方法
 }

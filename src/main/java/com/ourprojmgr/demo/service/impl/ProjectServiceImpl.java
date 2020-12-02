@@ -1,8 +1,7 @@
 package com.ourprojmgr.demo.service.impl;
 
-import com.ourprojmgr.demo.dbmodel.Invitation;
-import com.ourprojmgr.demo.dbmodel.Project;
-import com.ourprojmgr.demo.dbmodel.User;
+import com.ourprojmgr.demo.dbmodel.*;
+import com.ourprojmgr.demo.jsonmodel.CommentJson;
 import com.ourprojmgr.demo.jsonmodel.InvitationJson;
 import com.ourprojmgr.demo.jsonmodel.ProjectJson;
 import com.ourprojmgr.demo.service.IProjectService;
@@ -75,5 +74,35 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public void cancelInvitation(User admin, Invitation invitation) {
 
+    }
+
+    @Override
+    public List<Comment> getTaskComments(int taskId) {
+        return null;
+    }
+
+    @Override
+    public Task getTaskById(int taskId) {
+        return null;
+    }
+
+    @Override
+    public Comment getTaskComment(int taskId, int commentId) {
+        return null;
+    }
+
+    @Override
+    public void saveComment(Comment comment) {
+
+    }
+
+    @Override
+    public void deleteComment(int commentId) {
+
+    }
+
+    @Override
+    public CommentJson commentToJson(Comment comment) {
+        return null;
     }
 }
