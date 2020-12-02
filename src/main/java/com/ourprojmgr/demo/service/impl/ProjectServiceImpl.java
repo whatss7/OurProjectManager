@@ -134,6 +134,11 @@ public class ProjectServiceImpl implements IProjectService {
         return commentJson;
     }
 
+    /**
+     * 将 DB Model 的 User 转换为 JSON Model
+     * @param user DB Model 的 User
+     * @return UserJson 用户的Json
+     */
     private UserJson userToJson(User user){
         if(user == null){
             return null;
