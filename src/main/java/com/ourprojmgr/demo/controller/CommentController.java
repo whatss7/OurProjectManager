@@ -38,19 +38,19 @@ public class CommentController {
      * @param user 当前用户
      * @param projectId 项目id
      * @param taskId 任务id
-     * @return List<Comment> 某项任务下的所有评论
+     * @return List<CommentJson> 某项任务下的所有评论
      * @throws BusinessException 业务异常
      */
     @GetMapping
     @LoginRequired
     @ResponseStatus(HttpStatus.OK)
-    public List<Comment> getTaskComments(@CurrentUser User user,
-                                         @PathVariable int projectId,
-                                         @PathVariable int taskId){
+    public List<CommentJson> getTaskCommentJsons(@CurrentUser User user,
+                                                 @PathVariable int projectId,
+                                                 @PathVariable int taskId){
         Project project = getProjectOrThrow(projectId);  //项目不存在则抛异常
         checkMemberOrThrow(user, project); //不是本项目的Member则抛异常
         getTaskOrThrow(taskId,projectId); //任务不存在则抛异常
-        return projectService.getTaskComments(taskId);
+        return projectService.getTaskCommentJsons(taskId);
     }
 
     /**
@@ -59,24 +59,24 @@ public class CommentController {
      * @param projectId 项目id
      * @param taskId 任务id
      * @param id 评论id
-     * @return Comment 评论
+     * @return CommentJson 评论的Json
      * @throws BusinessException 业务异常
      */
     @GetMapping("/{id}")
     @LoginRequired
     @ResponseStatus(HttpStatus.OK)
-    public Comment getTaskComment(@CurrentUser User user,
-                                  @PathVariable int projectId,
-                                  @PathVariable int taskId,
-                                  @PathVariable int id){
+    public CommentJson getTaskCommentJson(@CurrentUser User user,
+                                          @PathVariable int projectId,
+                                          @PathVariable int taskId,
+                                          @PathVariable int id){
         Project project = getProjectOrThrow(projectId); //项目不存在则抛异常
         checkMemberOrThrow(user, project); //不是本项目的Member则抛异常
         getTaskOrThrow(taskId,projectId);  //任务不存在则抛异常
-        Comment comment = projectService.getTaskComment(taskId, id);
-        if(comment == null){ //评论不存在则抛异常
+        CommentJson commentJson = projectService.getTaskCommentJson(taskId, id);
+        if(commentJson == null){ //评论不存在则抛异常
             throw new BusinessException(BusinessErrorType.COMMENT_NOT_FOUND, "Comment with id '" + id + "' not found");
         }
-        return comment;
+        return commentJson;
     }
 
     /**
@@ -103,8 +103,7 @@ public class CommentController {
         comment.setCreateAt(LocalDateTime.now());
         comment.setTaskId(taskId);
         comment.setUserId(user.getId());
-        projectService.saveComment(comment);
-        return projectService.commentToJson(comment);
+        return projectService.saveComment(comment);
     }
 
     /**
@@ -125,8 +124,8 @@ public class CommentController {
         Project project = getProjectOrThrow(projectId);  //项目不存在则抛异常
         checkAdminOrThrow(user, project); //不是本项目的Member则抛异常
         getTaskOrThrow(taskId,projectId);  //任务不存在则抛异常
-        Comment comment = projectService.getTaskComment(taskId, id);
-        if(comment == null){  //评论不存在则抛异常
+        CommentJson commentJson = projectService.getTaskCommentJson(taskId, id);
+        if(commentJson == null){  //评论不存在则抛异常
             throw new BusinessException(BusinessErrorType.COMMENT_NOT_FOUND, "Comment with id '" + id + "' not found");
         }
         projectService.deleteComment(id);
