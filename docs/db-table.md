@@ -19,8 +19,8 @@ CREATE TABLE User(
     nickname VARCHAR(255) NOT NULL, -- 用户昵称
     hashedPassword VARCHAR(255) NOT NULL, -- 哈希后的密码
     salt VARCHAR(255) NOT NULL, -- 盐
-    createAt Date, -- 注册时间
-    updateAt Date, -- 更新时间
+    createAt DATETIME, -- 注册时间
+    updateAt DATETIME, -- 更新时间
     PRIMARY KEY(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
@@ -42,7 +42,7 @@ CREATE TABLE Notification(
      `read` BOOLEAN NOT NULL,
      title VARCHAR(255) NOT NULL,
      body VARCHAR(255),
-     createAt Date,
+     createAt DATETIME,
      senderId INT UNSIGNED NOT NULL,
      receiverId INT UNSIGNED NOT NULL,
      PRIMARY KEY(id),
@@ -66,8 +66,8 @@ CREATE TABLE Project(
      id INT UNSIGNED AUTO_INCREMENT, 
      name VARCHAR(255) NOT NULL, 
      description VARCHAR(255), 
-     createAt Date,
-     updateAt Date,
+     createAt DATETIME,
+     updateAt DATETIME,
      PRIMARY KEY(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
@@ -84,7 +84,7 @@ CREATE TABLE Member(
      userId INT UNSIGNED NOT NULL,
      projectId INT UNSIGNED NOT NULL,
      role VARCHAR(255) NOT NULL, 
-     joinAt Date,
+     joinAt DATETIME,
     PRIMARY KEY(userId, projectId),
     FOREIGN KEY(userId) REFERENCES User(id) ON DELETE CASCADE,
     FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE
@@ -110,10 +110,10 @@ CREATE TABLE Task(
       projectId INT UNSIGNED NOT NULL,
       title  VARCHAR(255) NOT NULL, 
       body  VARCHAR(255),
-      createAt Date,
+      createAt DATETIME,
       creatorId INT UNSIGNED NOT NULL,
       complete BOOLEAN NOT NULL,
-      completeAt Date,
+      completeAt DATETIME,
       completerId INT UNSIGNED,
       PRIMARY KEY(id),
       FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE,
@@ -152,7 +152,7 @@ CREATE Table Comment(
      id INT UNSIGNED AUTO_INCREMENT, 
      taskId INT UNSIGNED NOT NULL,
      body VARCHAR(255) NOT NULL,
-     createAt Date NOT NULL,
+     createAt DATETIME NOT NULL,
      userId INT UNSIGNED NOT NULL,
      PRIMARY KEY(id),
      FOREIGN KEY(taskId) REFERENCES Task(id) ON DELETE CASCADE,
@@ -174,8 +174,8 @@ CREATE Table Comment(
 ```sql
 CREATE Table Invitation(
       id INT UNSIGNED AUTO_INCREMENT, 
-      createAt Date NOT NULL,
-      endAt Date NOT NULL,
+      createAt DATETIME NOT NULL,
+      endAt DATETIME NOT NULL,
       status VARCHAR(255) NOT NULL, 
       senderId INT UNSIGNED NOT NULL,
       receiverId INT UNSIGNED NOT NULL,
