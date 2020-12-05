@@ -59,18 +59,50 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
+    public Project createProject(Project project) {
+        return projectDao.insertProject(project);
+    }
+
+    @Override
+    public void updateProject(Project project) {
+        projectDao.updateProject(project);
+    }
+
+    @Override
+    public void deleteProject(int projectId) {
+        projectDao.deleteProject(projectId);
+    }
+
+    @Override
     public boolean isSuperAdminOf(User user, Project project) {
-        return projectDao.getMemberCount(user.getId(), project.getId(), "SuperAdmin") != 0;
+        return
+                projectDao.getMemberCount(user.getId(), project.getId(), "SuperAdmin")!= 0;
     }
 
     @Override
     public boolean isAdminOf(User user, Project project) {
-        return projectDao.getMemberCount(user.getId(), project.getId(), "Admin") != 0;
+        return projectDao.getMemberCount(user.getId(), project.getId(), "Admin")  +
+                projectDao.getMemberCount(user.getId(), project.getId(), "SuperAdmin")!= 0;
     }
 
     @Override
     public boolean isMemberOf(User user, Project project) {
-        return projectDao.getMemberCount(user.getId(), project.getId(), "Member") != 0;
+        return projectDao.getMemberCount(user.getId(), project.getId()) != 0;
+    }
+
+    @Override
+    public List<User> getMembers(Project project){
+        return projectDao.getAllMembers(project.getId());
+    }
+
+    @Override
+    public void addMember(User user, Project project, String role) {
+        projectDao.insertMember(user.getId(), project.getId(), role, LocalDateTime.now());
+    }
+
+    @Override
+    public void deleteMember(User user, Project project) {
+        projectDao.deleteMember(user.getId(), project.getId());
     }
 
     @Override

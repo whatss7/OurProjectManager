@@ -26,6 +26,17 @@ public interface IProjectService {
     ProjectJson projectToJson(Project project);
 
     /**
+     * 创建一个新的项目
+     * @param project 要创建的项目信息
+     * @return 创建的项目
+     */
+    Project createProject(Project project);
+
+    void updateProject(Project project);
+
+    void deleteProject(int projectId);
+
+    /**
      * 是否为项目的 Admin
      */
     boolean isSuperAdminOf(User user, Project project);
@@ -39,6 +50,12 @@ public interface IProjectService {
      * 是否为项目的 Member（或 Admin、SuperAdmin）
      */
     boolean isMemberOf(User user, Project project);
+
+    List<User> getMembers(Project project);
+
+    void addMember(User user, Project project, String role);
+
+    void deleteMember(User user, Project project);
 
     /**
      * 按 ID 获取邀请
