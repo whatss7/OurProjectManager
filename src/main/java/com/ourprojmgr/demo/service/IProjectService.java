@@ -116,9 +116,9 @@ public interface IProjectService {
     /**
      * 获取某项任务下的所有评论
      * @param taskId 任务id
-     * @return List<Comment> 任务下的所有评论
+     * @return List<CommentJson> 任务下的所有评论的Json
      */
-    List<Comment> getTaskComments(int taskId);
+    List<CommentJson> getTaskCommentJsons(int taskId);
 
     /**
      * 按照id获取任务
@@ -131,15 +131,16 @@ public interface IProjectService {
      * 获取某项任务下的某条评论
      * @param taskId 任务id
      * @param commentId 评论id
-     * @return Comment 评论
+     * @return CommentJson 评论的Json
      */
-    Comment getTaskComment(int taskId, int commentId);
+    CommentJson getTaskCommentJson(int taskId, int commentId);
 
     /**
      * 保存评论
      * @param comment 新评论
+     * @return CommentJson 新评论的Json
      */
-    void saveComment(Comment comment);
+    CommentJson saveComment(Comment comment);
 
     /**
      * 删除评论
@@ -149,6 +150,8 @@ public interface IProjectService {
 
     /**
      * 将 DB Model 的 Comment 转换为 JSON Model
+     * @param comment DB Model 的 Comment
+     * @return JSON Model
      */
     CommentJson commentToJson(Comment comment);
 
