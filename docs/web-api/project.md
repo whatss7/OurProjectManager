@@ -172,7 +172,7 @@
 需要在 Authorization 头信息中包含 token。
 
 ## 请求体
-一个 Project 对象，其实只需要使用其中的 name 字段。
+一个 Project 对象，其实只需要使用其中的 name 字段和 description 字段。
 
 ## 应答
 ### 创建项目成功

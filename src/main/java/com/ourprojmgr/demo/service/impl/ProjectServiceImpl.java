@@ -136,8 +136,17 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
+    /*
     public List<Comment> getTaskComments(int taskId) {
         return projectDao.getTaskComment(taskId);
+     */
+    public List<CommentJson> getTaskCommentJsons(int taskId) {
+        List<Comment> comments = projectDao.getTaskComment(taskId);
+        List<CommentJson> commentJsons = new ArrayList<CommentJson>();
+        for(Comment comment:comments){
+            commentJsons.add(commentToJson(comment));
+        }
+        return commentJsons;
     }
 
     @Override
@@ -146,17 +155,22 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public Comment getTaskComment(int taskId, int commentId) {
+    public CommentJson getTaskCommentJson(int taskId, int commentId) {
+        return null;
+    }
+
+    private Comment getTaskComment(int taskId, int commentId) {
         return projectDao.getComment(commentId, taskId);
     }
 
     @Override
-    public void saveComment(Comment comment) {
+    public CommentJson saveComment(Comment comment) {
         if(getTaskComment(comment.getTaskId(), comment.getId()) == null){
             projectDao.insertComment(comment);
         } else {
             projectDao.updateComment(comment);
         }
+        return commentToJson(comment);
     }
 
     @Override
@@ -166,12 +180,28 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public CommentJson commentToJson(Comment comment) {
-        CommentJson json = new CommentJson();
-        json.setBody(comment.getBody());
-        json.setCreateAt(comment.getCreateAt());
-        json.setId(comment.getId());
-        User user = userDao.getUserById(comment.getUserId());
-        json.setUser(userService.userToJson(user));
-        return json;
+        if(comment == null){
+            return null;
+        }
+        CommentJson commentJson = new CommentJson();
+        commentJson.setId(comment.getId());
+        commentJson.setBody(comment.getBody());
+        commentJson.setCreateAt(comment.getCreateAt());
+        commentJson.setUser(userToJson(userDao.getUserById(comment.getUserId())));
+        return commentJson;
+    }
+
+    private UserJson userToJson(User user){
+        if(user == null){
+            return null;
+        }
+        UserJson userJson = new UserJson();
+        userJson.setId(user.getId());
+        userJson.setUsername(user.getUsername());
+        userJson.setNickname(user.getNickname());
+        userJson.setCreateAt(user.getCreateAt());
+        userJson.setUpdateAt(user.getUpdateAt());
+        userJson.setProjectCount(userDao.countProjectByUserId(user.getId()));
+        return userJson;
     }
 }
