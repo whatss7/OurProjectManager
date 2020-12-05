@@ -4,6 +4,7 @@ import com.ourprojmgr.demo.dbmodel.*;
 import com.ourprojmgr.demo.jsonmodel.CommentJson;
 import com.ourprojmgr.demo.jsonmodel.InvitationJson;
 import com.ourprojmgr.demo.jsonmodel.ProjectJson;
+import com.ourprojmgr.demo.jsonmodel.TaskJson;
 
 import java.util.List;
 
@@ -142,7 +143,11 @@ public interface IProjectService {
      * @param taskId 任务id
      * @return Task 任务
      */
-    Task getTaskById(int taskId);
+    Task getTaskById(int taskId, int projectId);
+
+    List<Task> getProjectTasks(int projectId);
+
+    List<User> getExecutors(int taskId);
 
     /**
      * 获取某项任务下的某条评论
@@ -151,6 +156,14 @@ public interface IProjectService {
      * @return CommentJson 评论的Json
      */
     CommentJson getTaskCommentJson(int taskId, int commentId);
+
+    TaskJson taskToJson(Task task);
+
+    Task createTask(Task task);
+
+    void addExecutor(int taskId, int executorId);
+
+    void deleteExecutor(int taskId, int executorId);
 
     /**
      * 保存评论

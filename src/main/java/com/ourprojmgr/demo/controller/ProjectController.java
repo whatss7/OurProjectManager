@@ -3,11 +3,13 @@ package com.ourprojmgr.demo.controller;
 import com.ourprojmgr.demo.controller.utility.CurrentUser;
 import com.ourprojmgr.demo.controller.utility.LoginRequired;
 import com.ourprojmgr.demo.dbmodel.Project;
+import com.ourprojmgr.demo.dbmodel.Task;
 import com.ourprojmgr.demo.dbmodel.User;
 import com.ourprojmgr.demo.exception.BusinessErrorType;
 import com.ourprojmgr.demo.exception.BusinessException;
 import com.ourprojmgr.demo.jsonmodel.MemberJson;
 import com.ourprojmgr.demo.jsonmodel.ProjectJson;
+import com.ourprojmgr.demo.jsonmodel.TaskJson;
 import com.ourprojmgr.demo.jsonmodel.UserJson;
 import com.ourprojmgr.demo.service.IProjectService;
 import com.ourprojmgr.demo.service.IUserService;
@@ -148,22 +150,99 @@ public class ProjectController {
         projectService.deleteMember(opUser, project);
     }
 
+    @GetMapping("{projectId}/tasks")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
+    public List<TaskJson> getTasks(
+            @PathVariable Integer projectId,
+            @CurrentUser User user) {
+        Project project = getProjectOrThrow(projectId);
+        throwIfNotMember(user, project);
+        List<Task> tasks = projectService.getProjectTasks(projectId);
+        List<TaskJson> jsons = new ArrayList<>();
+        tasks.forEach(t -> jsons.add(projectService.taskToJson(t)));
+        return jsons;
+    }
+
+    @PostMapping("{projectId}/tasks")
+    @ResponseStatus(HttpStatus.CREATED)
+    @LoginRequired
+    public TaskJson createTask(
+            @PathVariable Integer projectId,
+            @RequestBody TaskJson taskJson,
+            @CurrentUser User user) {
+        Project project = getProjectOrThrow(projectId);
+        throwIfNotAdmin(user, project);
+        Task task = new Task();
+        task.setBody(taskJson.getBody());
+        task.setComplete(taskJson.isComplete());
+        task.setCompleteAt(taskJson.getCompleteAt());
+        task.setCompleterId(taskJson.getCompleter().getId());
+        task.setCreateAt(LocalDateTime.now());
+        task.setCreatorId(user.getId());
+        task.setId(taskJson.getId());
+        task.setProjectId(projectId);
+        task.setTitle(taskJson.getTitle());
+        task = projectService.createTask(task);
+        taskJson.getExecutors().forEach(u -> projectService.addExecutor(taskJson.getId(), u.getId()));
+        return projectService.taskToJson(task);
+    }
+
+    @GetMapping("{projectId}/tasks/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
+    public TaskJson getTask(
+            @PathVariable Integer projectId,
+            @PathVariable Integer id,
+            @CurrentUser User user) {
+        Project project = getProjectOrThrow(projectId);
+        throwIfNotMember(user, project);
+        Task task = projectService.getTaskById(id, projectId);
+        return projectService.taskToJson(task);
+    }
+
+    @PutMapping("{projectId}/tasks/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
+    public void updateTask(
+            @PathVariable Integer projectId,
+            @PathVariable Integer id,
+            @RequestBody TaskJson json,
+            @CurrentUser User user) {
+        Project project = getProjectOrThrow(projectId);
+        throwIfNotAdmin(user, project);
+        Task task = projectService.getTaskById(id, projectId);
+        task.setTitle(json.getTitle());
+        task.setBody(json.getBody());
+        List<User> oldExecutors = projectService.getExecutors(task.getId());
+        for(User u:oldExecutors){
+            if(!json.getExecutors().stream().anyMatch(u2 -> u.getId() == u2.getId())){
+                projectService.deleteExecutor(id, u.getId());
+            }
+        }
+        for(UserJson u:json.getExecutors()){
+            if(!oldExecutors.stream().anyMatch(u2 -> u.getId() == u2.getId())){
+                projectService.addExecutor(id, u.getId());
+            }
+        }
+    }
+
     private void throwIfNotMember(User user, Project project){
-        if(projectService.isMemberOf(user, project)){
+        if(!projectService.isMemberOf(user, project)){
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + user.getNickname() + " is not the member of " + project.getName() + ".");
         }
     }
 
     private void throwIfNotAdmin(User user, Project project){
-        if(projectService.isAdminOf(user, project)){
+        if(!projectService.isAdminOf(user, project)){
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + user.getNickname() + " is not the admin of " + project.getName() + ".");
         }
     }
 
     private void throwIfNotSuperAdmin(User user, Project project){
-        if(projectService.isSuperAdminOf(user, project)){
+        if(!projectService.isSuperAdminOf(user, project)){
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + user.getNickname() + " is not the super admin of " + project.getName() + ".");
         }

@@ -3,12 +3,11 @@ package com.ourprojmgr.demo.service.impl;
 import com.ourprojmgr.demo.dao.IProjectDao;
 import com.ourprojmgr.demo.dao.IUserDao;
 import com.ourprojmgr.demo.dbmodel.*;
-import com.ourprojmgr.demo.jsonmodel.CommentJson;
-import com.ourprojmgr.demo.jsonmodel.InvitationJson;
-import com.ourprojmgr.demo.jsonmodel.ProjectJson;
-import com.ourprojmgr.demo.jsonmodel.UserJson;
+import com.ourprojmgr.demo.jsonmodel.*;
 import com.ourprojmgr.demo.service.IProjectService;
 import com.ourprojmgr.demo.service.IUserService;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -168,10 +167,6 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    /*
-    public List<Comment> getTaskComments(int taskId) {
-        return projectDao.getTaskComment(taskId);
-     */
     public List<CommentJson> getTaskCommentJsons(int taskId) {
         List<Comment> comments = projectDao.getTaskComment(taskId);
         List<CommentJson> commentJsons = new ArrayList<CommentJson>();
@@ -182,22 +177,66 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public Task getTaskById(int taskId) {
-        return projectDao.getTaskById(taskId);
+    public Task getTaskById(int taskId, int projectId) {
+        return projectDao.getTaskById(taskId, projectId);
+    }
+
+    @Override
+    public List<Task> getProjectTasks(int projectId){
+        return projectDao.getProjectTask(projectId);
+    }
+
+    @Override
+    public List<User> getExecutors(int taskId){
+        return projectDao.getExecutors(taskId);
     }
 
     @Override
     public CommentJson getTaskCommentJson(int taskId, int commentId) {
-        return null;
+        Comment comment = projectDao.getCommentById(commentId, taskId);
+        return commentToJson(comment);
     }
 
-    private Comment getTaskComment(int taskId, int commentId) {
-        return projectDao.getComment(commentId, taskId);
+    @Override
+    public TaskJson taskToJson(Task task){
+        TaskJson json = new TaskJson();
+        json.setBody(task.getBody());
+        json.setCommentNum(projectDao.getCommentCount(task.getId()));
+        json.setComplete(task.isComplete());
+        json.setCompleteAt(task.getCompleteAt());
+        User completer = userDao.getUserById(task.getCompleterId());
+        json.setCompleter(userService.userToJson(completer));
+        json.setCreateAt(task.getCreateAt());
+        User creator = userDao.getUserById(task.getCreatorId());
+        json.setCreator(userService.userToJson(creator));
+        List<User> executors = projectDao.getExecutors(task.getId());
+        List<UserJson> executorJsons = new ArrayList<>();
+        executors.forEach(u -> executorJsons.add(userService.userToJson(u)));
+        json.setExecutors(executorJsons);
+        json.setId(task.getId());
+        json.setTitle(task.getTitle());
+        return json;
+    }
+
+    @Override
+    public Task createTask(Task task){
+        projectDao.insertTask(task);
+        return task;
+    }
+
+    @Override
+    public void addExecutor(int taskId, int executorId){
+        projectDao.insertExecutor(taskId, executorId);
+    }
+
+    @Override
+    public void deleteExecutor(int taskId, int executorId){
+        projectDao.deleteExecutor(taskId, executorId);
     }
 
     @Override
     public CommentJson saveComment(Comment comment) {
-        if(getTaskComment(comment.getTaskId(), comment.getId()) == null){
+        if(projectDao.getCommentById(comment.getId(), comment.getTaskId()) == null){
             projectDao.insertComment(comment);
         } else {
             projectDao.updateComment(comment);

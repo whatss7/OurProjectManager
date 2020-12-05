@@ -23,13 +23,13 @@ public interface IProjectDao {
 	@Delete("delete from Project where id = #{id}")
 	public void deleteProject(int id);
 
-	@Select("select u.* from User u, Member m where u.id = m.userId and m.projectId = #{projectId} and m.role = 'Member'")
+	@Select("select u.* from User u, Member m where u.id = m.userId and m.projectId = #{projectId}")
 	public List<User> getAllMembers(int projectId);
 
-	@Select("select count(*) from Member m where m.userId = #{userId} and m.projectId = #{projectId}")
+	@Select("select count(*) from Member where userId = #{userId} and projectId = #{projectId}")
 	public int getMemberCount(int userId, int projectId);
 
-	@Select("select count(*) from Member m where m.userId = #{userId} and m.projectId = #{projectId} and role = #{role}")
+	@Select("select count(*) from Member where userId = #{userId} and projectId = #{projectId} and role = #{role}")
 	public int getMemberCount(int userId, int projectId, String role);
 
 	@Select("select * from Invitation where id = #{id}")
@@ -53,11 +53,29 @@ public interface IProjectDao {
 	@Select("select * from Comment where taskId = #{taskId}")
 	public List<Comment> getTaskComment(int taskId);
 
-	@Select("select * from Task where id = #{id}")
-	public Task getTaskById(int id);
+	@Select("select * from Task where id = #{id} and projectId = #{projectId}")
+	public Task getTaskById(int id, int projectId);
+
+	@Select("select * from Task where projectId = #{projectId}")
+	public List<Task> getProjectTask(int projectId);
+
+	@Update("insert into Task(id, projectId, title, body, createAt, creatorId, complete, completeAt, completerId) values(#{id}, #{projectId}, #{title}, #{body}, #{createAt}, #{creatorId}, #{complete}, #{completeAt}, #{completerId})")
+	public Task insertTask(Task task);
+
+	@Select("select u.* from User u, TaskExecutor ex where ex.taskId = #{taskId} and ex.executorId == u.id")
+	public List<User> getExecutors(int taskId);
+
+	@Insert("insert into TaskExecutor(taskId, executorId) values(#{taskId}, #{executorId})")
+	public void insertExecutor(int taskId, int executorId);
+
+	@Delete("delete from TaskExecutor where taskId = #{taskId} and executorId = #{executorId}")
+	public void deleteExecutor(int taskId, int executorId);
 
 	@Select("select * from Comment where id = #{id} and taskId = #{taskId}")
-	public Comment getComment(int id, int taskId);
+	public Comment getCommentById(int id, int taskId);
+
+	@Select("select count(*) from Comment where taskId = #{taskId}")
+	public int getCommentCount(int taskId);
 
 	@Update("update Comment set taskId = #{taskId}, body = #{body}, createAt = #{createAt}, userId = #{userId} where id = #{id}")
 	public void updateComment(Comment comment);
