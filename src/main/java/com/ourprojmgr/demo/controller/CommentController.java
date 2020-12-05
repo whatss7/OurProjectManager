@@ -155,7 +155,7 @@ public class CommentController {
      * @throws BusinessException 业务异常
      */
     private Task getTaskOrThrow(int taskId, int projectId){
-        Task task = projectService.getTaskById(taskId);
+        Task task = projectService.getTaskById(taskId, projectId);
         if(task == null){  //任务不存在则抛异常
             throw new BusinessException(BusinessErrorType.TASK_NOT_FOUND, "task '" + taskId + "' not exist");
         }

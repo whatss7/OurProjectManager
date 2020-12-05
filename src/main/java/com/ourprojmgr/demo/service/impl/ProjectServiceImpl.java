@@ -11,6 +11,7 @@ import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.naming.directory.InvalidAttributesException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,7 @@ import java.util.List;
  */
 @Service
 public class ProjectServiceImpl implements IProjectService {
+
     @Autowired
     IProjectDao projectDao;
 
@@ -31,6 +33,7 @@ public class ProjectServiceImpl implements IProjectService {
     @Autowired
     IUserService userService;
 
+    //region Project Methods
     @Override
     public Project getProjectById(int id) {
         return projectDao.getProjectById(id);
@@ -71,7 +74,9 @@ public class ProjectServiceImpl implements IProjectService {
     public void deleteProject(int projectId) {
         projectDao.deleteProject(projectId);
     }
+    //endregion
 
+    //region Member Methods
     @Override
     public boolean isSuperAdminOf(User user, Project project) {
         return
@@ -103,7 +108,9 @@ public class ProjectServiceImpl implements IProjectService {
     public void deleteMember(User user, Project project) {
         projectDao.deleteMember(user.getId(), project.getId());
     }
+    //endregion
 
+    //region Invitation Methods
     @Override
     public Invitation getInvitationById(int id) {
         return projectDao.getInvitationById(id);
@@ -140,6 +147,11 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
+    public Invitation getInvitationByReceiver(Project project, User receiver){
+        return projectDao.getInvitationByReceiver(project.getId(), receiver.getId(), Invitation.STATUS_CREATED);
+    }
+
+    @Override
     public List<Invitation> getInvitations(Project project) {
         return projectDao.getInvitationByProjectId(project.getId());
     }
@@ -153,8 +165,9 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public void rejectInvitation(User user, Invitation invitation) {
+    public void rejectInvitation(User user, Invitation invitation){
         Project project = getProjectById(invitation.getProjectId());
+        if(user.getId() != invitation.getReceiverId()) return;
         invitation.setStatus(Invitation.STATUS_REJECTED);
         projectDao.updateInvitation(invitation);
     }
@@ -162,10 +175,13 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public void cancelInvitation(User admin, Invitation invitation) {
         Project project = getProjectById(invitation.getProjectId());
+        if(admin.getId() != invitation.getReceiverId()) return;
         invitation.setStatus(Invitation.STATUS_CANCELED);
         projectDao.updateInvitation(invitation);
     }
+    //endregion
 
+    //region Task Methods
     @Override
     public List<CommentJson> getTaskCommentJsons(int taskId) {
         List<Comment> comments = projectDao.getTaskComment(taskId);
@@ -174,6 +190,12 @@ public class ProjectServiceImpl implements IProjectService {
             commentJsons.add(commentToJson(comment));
         }
         return commentJsons;
+    }
+
+    @Override
+    public CommentJson getTaskCommentJson(int taskId, int commentId) {
+        Comment comment = projectDao.getCommentById(commentId, taskId);
+        return commentToJson(comment);
     }
 
     @Override
@@ -187,18 +209,38 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
+    public Task createTask(Task task){
+        return projectDao.insertTask(task);
+    }
+
+    @Override
+    public void updateTask(Task task){
+        projectDao.updateTask(task);
+    }
+
+    @Override
+    public void deleteTask(int taskId){
+        projectDao.deleteTask(taskId);
+    }
+
+    @Override
     public List<User> getExecutors(int taskId){
         return projectDao.getExecutors(taskId);
     }
 
     @Override
-    public CommentJson getTaskCommentJson(int taskId, int commentId) {
-        Comment comment = projectDao.getCommentById(commentId, taskId);
-        return commentToJson(comment);
+    public void addExecutor(int taskId, int executorId) {
+        projectDao.insertExecutor(taskId, executorId);
+    }
+
+    @Override
+    public void deleteExecutor(int taskId, int executorId){
+        projectDao.deleteExecutor(taskId, executorId);
     }
 
     @Override
     public TaskJson taskToJson(Task task){
+        if(task == null) return null;
         TaskJson json = new TaskJson();
         json.setBody(task.getBody());
         json.setCommentNum(projectDao.getCommentCount(task.getId()));
@@ -217,23 +259,9 @@ public class ProjectServiceImpl implements IProjectService {
         json.setTitle(task.getTitle());
         return json;
     }
+    //endregion
 
-    @Override
-    public Task createTask(Task task){
-        projectDao.insertTask(task);
-        return task;
-    }
-
-    @Override
-    public void addExecutor(int taskId, int executorId){
-        projectDao.insertExecutor(taskId, executorId);
-    }
-
-    @Override
-    public void deleteExecutor(int taskId, int executorId){
-        projectDao.deleteExecutor(taskId, executorId);
-    }
-
+    //region Comment Methods
     @Override
     public CommentJson saveComment(Comment comment) {
         if(projectDao.getCommentById(comment.getId(), comment.getTaskId()) == null){
@@ -251,28 +279,13 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public CommentJson commentToJson(Comment comment) {
-        if(comment == null){
-            return null;
-        }
+        if(comment == null) return null;
         CommentJson commentJson = new CommentJson();
         commentJson.setId(comment.getId());
         commentJson.setBody(comment.getBody());
         commentJson.setCreateAt(comment.getCreateAt());
-        commentJson.setUser(userToJson(userDao.getUserById(comment.getUserId())));
+        commentJson.setUser(userService.userToJson(userDao.getUserById(comment.getUserId())));
         return commentJson;
     }
-
-    private UserJson userToJson(User user){
-        if(user == null){
-            return null;
-        }
-        UserJson userJson = new UserJson();
-        userJson.setId(user.getId());
-        userJson.setUsername(user.getUsername());
-        userJson.setNickname(user.getNickname());
-        userJson.setCreateAt(user.getCreateAt());
-        userJson.setUpdateAt(user.getUpdateAt());
-        userJson.setProjectCount(userDao.countProjectByUserId(user.getId()));
-        return userJson;
-    }
+    //endregion
 }

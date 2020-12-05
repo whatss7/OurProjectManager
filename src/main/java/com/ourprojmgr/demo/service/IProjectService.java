@@ -87,6 +87,8 @@ public interface IProjectService {
      */
     Invitation sendInvitation(User sender, User Receiver, Project project);
 
+    Invitation getInvitationByReceiver(Project project, User receiver);
+
     /**
      * 获取项目中所有的邀请
      */
@@ -147,6 +149,8 @@ public interface IProjectService {
 
     List<Task> getProjectTasks(int projectId);
 
+    void deleteTask(int taskId);
+
     List<User> getExecutors(int taskId);
 
     /**
@@ -156,6 +160,8 @@ public interface IProjectService {
      * @return CommentJson 评论的Json
      */
     CommentJson getTaskCommentJson(int taskId, int commentId);
+
+    void updateTask(Task task);
 
     TaskJson taskToJson(Task task);
 
