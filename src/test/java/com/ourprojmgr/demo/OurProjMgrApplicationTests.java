@@ -10,4 +10,9 @@ class OurProjMgrApplicationTests {
     void contextLoads() {
     }
 
+
+    @Test
+    void testProjectService(){
+
+    }
 }
