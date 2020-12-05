@@ -1,12 +1,17 @@
 package com.ourprojmgr.demo.service.impl;
 
+import com.ourprojmgr.demo.dao.IProjectDao;
+import com.ourprojmgr.demo.dao.IUserDao;
 import com.ourprojmgr.demo.dbmodel.*;
 import com.ourprojmgr.demo.jsonmodel.CommentJson;
 import com.ourprojmgr.demo.jsonmodel.InvitationJson;
 import com.ourprojmgr.demo.jsonmodel.ProjectJson;
+import com.ourprojmgr.demo.jsonmodel.UserJson;
 import com.ourprojmgr.demo.service.IProjectService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -16,9 +21,15 @@ import java.util.List;
  */
 @Service
 public class ProjectServiceImpl implements IProjectService {
+    @Autowired
+    IProjectDao projectDao;
+
+    @Autowired
+    IUserDao userDao;
+
     @Override
     public Project getProjectById(int id) {
-        return null;
+        return projectDao.getProjectById(id);
     }
 
     @Override
@@ -28,17 +39,20 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public boolean isSuperAdminOf(User user, Project project) {
-        return false;
+        String role = projectDao.getUserRole(project.getId(), user.getId());
+        return (role != null) && role.equals("SuperAdmin");
     }
 
     @Override
     public boolean isAdminOf(User user, Project project) {
-        return false;
+        String role = projectDao.getUserRole(project.getId(), user.getId());
+        return (role != null) && (role.equals("SuperAdmin") || role.equals("Admin"));
     }
 
     @Override
     public boolean isMemberOf(User user, Project project) {
-        return false;
+        String role = projectDao.getUserRole(project.getId(), user.getId());
+        return (role != null) && (role.equals("SuperAdmin") || role.equals("Admin") || role.equals("Member"));
     }
 
     @Override
@@ -77,32 +91,65 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public List<Comment> getTaskComments(int taskId) {
-        return null;
+    public List<CommentJson> getTaskCommentJsons(int taskId) {
+        List<Comment> comments = projectDao.getTaskComments(taskId);
+        List<CommentJson> commentJsons = new ArrayList<CommentJson>();
+        for(Comment comment:comments){
+            commentJsons.add(commentToJson(comment));
+        }
+        return commentJsons;
     }
 
     @Override
     public Task getTaskById(int taskId) {
-        return null;
+        return projectDao.getTaskById(taskId);
     }
 
     @Override
-    public Comment getTaskComment(int taskId, int commentId) {
-        return null;
+    public CommentJson getTaskCommentJson(int taskId, int commentId) {
+        return commentToJson(projectDao.getTaskComment(taskId, commentId));
     }
 
     @Override
-    public void saveComment(Comment comment) {
-
+    public CommentJson saveComment(Comment comment) {
+        projectDao.insertComment(comment);
+        return commentToJson(projectDao.getLastInsertComment());
     }
 
     @Override
     public void deleteComment(int commentId) {
-
+        projectDao.deleteComment(commentId);
     }
 
     @Override
     public CommentJson commentToJson(Comment comment) {
-        return null;
+        if(comment == null){
+            return null;
+        }
+        CommentJson commentJson = new CommentJson();
+        commentJson.setId(comment.getId());
+        commentJson.setBody(comment.getBody());
+        commentJson.setCreateAt(comment.getCreateAt());
+        commentJson.setUser(userToJson(userDao.getUserById(comment.getUserId())));
+        return commentJson;
+    }
+
+    /**
+     * 将 DB Model 的 User 转换为 JSON Model
+     * @param user DB Model 的 User
+     * @return UserJson 用户的Json
+     */
+    private UserJson userToJson(User user){
+        if(user == null){
+            return null;
+        }
+        UserJson userJson = new UserJson();
+        userJson.setId(user.getId());
+        userJson.setUsername(user.getUsername());
+        userJson.setNickname(user.getNickname());
+        userJson.setCreateAt(user.getCreateAt());
+        userJson.setUpdateAt(user.getUpdateAt());
+        userJson.setProjectCount(userDao.countProjectByUserId(user.getId()));
+        return userJson;
     }
 }
