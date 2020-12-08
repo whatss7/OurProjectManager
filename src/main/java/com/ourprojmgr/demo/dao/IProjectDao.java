@@ -15,8 +15,9 @@ public interface IProjectDao {
     @Select("select * from Project where id = #{id}")
     Project getProjectById(int id);
 
-    @Insert("insert into Project(id, name, description, createAt, updateAt) values (#{id}, #{name}, #{description}, #{createAt}, #{updateAt}")
-    Project insertProject(Project project);
+    @Insert("insert into Project(id, name, description, createAt, updateAt) values (#{id}, #{name}, #{description}, #{createAt}, #{updateAt})")
+    @Options(useGeneratedKeys=true)
+    void insertProject(Project project);
 
     @Update("update Project set name = #{name}, description = #{description}, createAt = #{createAt}. updateAt = #{updateAt} where id = #{id}")
     void updateProject(Project project);

@@ -36,52 +36,6 @@ public class UserController {
     }
 
     /**
-     * 登出，暂时先这么简单处理吧
-     *
-     * @author 朱华彬
-     */
-    @GetMapping("/logout")
-    @LoginRequired
-    public ResponseEntity<Void> logout() {
-        return new ResponseEntity<>(HttpStatus.OK);
-    }
-
-    /**
-     * 通过 token 获取当前用户
-     *
-     * @param currentUser 当前用户
-     * @return 当前用户的 JSON
-     * @author 朱华彬
-     */
-    @GetMapping("/whoami")
-    @ResponseStatus(HttpStatus.OK)
-    @LoginRequired
-    public UserJson whoami(@CurrentUser User currentUser) {
-        return userService.userToJson(currentUser);
-    }
-
-    /**
-     * 登录，若用户名和密码正确则返回用户的token，反之则抛异常
-     *
-     * @param loginJson 登录信息
-     * @return String 根据用户生成的token
-     * @throws BusinessException 错误的用户名或密码
-     */
-    @PostMapping("/login")
-    @ResponseStatus(HttpStatus.OK)
-    public String login(@RequestBody LoginJson loginJson) {
-        User user = userService.getUserByName(loginJson.getUsername());
-        if (user == null) {  //用户名错误
-            throw new BusinessException(BusinessErrorType.WRONG_PASSWORD_OR_USERNAME,
-                    "username '" + loginJson.getUsername() + "' not exist");
-        }
-        if (!userService.isRightPassword(user, loginJson.getPassword())) {  //密码错误
-            throw new BusinessException(BusinessErrorType.WRONG_PASSWORD_OR_USERNAME, "wrong password");
-        }
-        return getTokenByUser(user);
-    }
-
-    /**
      * 注册，将用户信息保存到数据库中，若注册的用户名已存在则抛异常
      *
      * @param signUpJson 注册信息
@@ -356,18 +310,6 @@ public class UserController {
 
 
     // ---------------------- 以下为辅助方法 ----------------------
-
-    /**
-     * 根据用户生成token，token中保存了用户Id
-     *
-     * @param user 用户
-     * @return String 生成的token
-     */
-    private String getTokenByUser(User user) {
-        return JWT.create()
-                .withAudience(Integer.toString(user.getId()))
-                .sign(Algorithm.HMAC256(user.getHashedPassword()));
-    }
 
     /**
      * 根据用户名获取用户，若用户不存在则抛异常

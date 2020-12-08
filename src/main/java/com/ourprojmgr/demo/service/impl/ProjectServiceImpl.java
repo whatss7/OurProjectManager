@@ -59,7 +59,8 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public Project createProject(Project project) {
-        return projectDao.insertProject(project);
+        projectDao.insertProject(project);
+        return project;
     }
 
     @Override
