@@ -26,8 +26,13 @@ import java.util.Random;
  */
 @Service
 public class UserServiceImpl implements IUserService {
-    @Autowired
+
     IUserDao userDao;
+
+    @Autowired
+    public UserServiceImpl(IUserDao userDao) {
+        this.userDao = userDao;
+    }
 
     /**
      * 按照 ID 获取用户

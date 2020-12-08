@@ -21,14 +21,16 @@ import java.util.List;
 @Service
 public class ProjectServiceImpl implements IProjectService {
 
-    @Autowired
-    IProjectDao projectDao;
+    private final IProjectDao projectDao;
+    private final IUserDao userDao;
+    private final IUserService userService;
 
     @Autowired
-    IUserDao userDao;
-
-    @Autowired
-    IUserService userService;
+    public ProjectServiceImpl(IProjectDao projectDao, IUserDao userDao, IUserService userService) {
+        this.projectDao = projectDao;
+        this.userDao = userDao;
+        this.userService = userService;
+    }
 
     //region Project Methods
     @Override
