@@ -79,14 +79,16 @@ public interface IUserService {
 
     /**
      * 生成并设置用户的盐值，再根据盐值生成并设置用户的哈希密码
-     * @param user 用户
+     *
+     * @param user     用户
      * @param password 原始密码
      */
     void hashPasswordAndSet(User user, String password);
 
     /**
      * 检查原始密码是否正确
-     * @param user 用户
+     *
+     * @param user     用户
      * @param password 原始密码
      * @return
      */
@@ -94,13 +96,15 @@ public interface IUserService {
 
     /**
      * 删除用户
+     *
      * @param user 用户
      */
     void deleteUser(User user);
 
     /**
      * 获取该用户参与的某个项目
-     * @param user 用户
+     *
+     * @param user      用户
      * @param projectId 项目id
      * @return ProjectJson 项目Json
      */
@@ -108,6 +112,7 @@ public interface IUserService {
 
     /**
      * 获取该用户收到的通知
+     *
      * @param user 用户
      * @return List<NotificationJson> 用户收到的所有通知
      */
@@ -115,7 +120,8 @@ public interface IUserService {
 
     /**
      * 获取该用户收到的某条通知
-     * @param user 用户
+     *
+     * @param user           用户
      * @param notificationId 通知id
      * @return NotificationJson 通知Json
      */
@@ -123,6 +129,7 @@ public interface IUserService {
 
     /**
      * 获取该用户发送的通知
+     *
      * @param user 用户
      * @return List<NotificationJson> 用户发送的所有通知
      */
@@ -130,7 +137,8 @@ public interface IUserService {
 
     /**
      * 获取该用户发送的某条通知
-     * @param user 用户
+     *
+     * @param user           用户
      * @param notificationId 通知id
      * @return NotificationJson 通知Json
      */
@@ -138,7 +146,8 @@ public interface IUserService {
 
     /**
      * 获取该用户发送的某条通知
-     * @param user 用户
+     *
+     * @param user           用户
      * @param notificationId 通知id
      * @return Notification 通知
      */
@@ -146,12 +155,14 @@ public interface IUserService {
 
     /**
      * 更新通知
+     *
      * @param notification 新通知
      */
     void updateNotification(Notification notification);
 
     /**
      * 保存通知
+     *
      * @param notification 新通知
      */
     void saveNotification(Notification notification);

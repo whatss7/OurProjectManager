@@ -2,6 +2,7 @@ package com.ourprojmgr.demo.jsonmodel;
 
 /**
  * 表示更新密码消息的 JSON
+ *
  * @author 朱华彬
  */
 public class UpdatePasswordJson {

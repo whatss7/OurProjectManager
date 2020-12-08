@@ -28,6 +28,7 @@ public interface IProjectService {
 
     /**
      * 创建一个新的项目
+     *
      * @param project 要创建的项目信息
      * @return 创建的项目
      */
@@ -135,6 +136,7 @@ public interface IProjectService {
 
     /**
      * 获取某项任务下的所有评论
+     *
      * @param taskId 任务id
      * @return List<CommentJson> 任务下的所有评论的Json
      */
@@ -142,6 +144,7 @@ public interface IProjectService {
 
     /**
      * 按照id获取任务
+     *
      * @param taskId 任务id
      * @return Task 任务
      */
@@ -155,7 +158,8 @@ public interface IProjectService {
 
     /**
      * 获取某项任务下的某条评论
-     * @param taskId 任务id
+     *
+     * @param taskId    任务id
      * @param commentId 评论id
      * @return CommentJson 评论的Json
      */
@@ -173,6 +177,7 @@ public interface IProjectService {
 
     /**
      * 保存评论
+     *
      * @param comment 新评论
      * @return CommentJson 新评论的Json
      */
@@ -180,12 +185,14 @@ public interface IProjectService {
 
     /**
      * 删除评论
+     *
      * @param commentId 评论id
      */
     void deleteComment(int commentId);
 
     /**
      * 将 DB Model 的 Comment 转换为 JSON Model
+     *
      * @param comment DB Model 的 Comment
      * @return JSON Model
      */

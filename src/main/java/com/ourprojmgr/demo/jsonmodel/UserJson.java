@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 /**
  * 表示用户信息的 JSON
+ *
  * @author 朱华彬
  */
 public class UserJson {

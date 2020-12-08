@@ -2,13 +2,15 @@ package com.ourprojmgr.demo.controller;
 
 import com.ourprojmgr.demo.controller.utility.CurrentUser;
 import com.ourprojmgr.demo.controller.utility.LoginRequired;
-import com.ourprojmgr.demo.dbmodel.*;
+import com.ourprojmgr.demo.dbmodel.Invitation;
+import com.ourprojmgr.demo.dbmodel.Project;
+import com.ourprojmgr.demo.dbmodel.Task;
+import com.ourprojmgr.demo.dbmodel.User;
 import com.ourprojmgr.demo.exception.BusinessErrorType;
 import com.ourprojmgr.demo.exception.BusinessException;
 import com.ourprojmgr.demo.jsonmodel.*;
 import com.ourprojmgr.demo.service.IProjectService;
 import com.ourprojmgr.demo.service.IUserService;
-import com.ourprojmgr.demo.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -40,20 +42,20 @@ public class ProjectController {
     @LoginRequired
     public ProjectJson createProject(
             @RequestBody ProjectJson projectJson,
-            @CurrentUser User user){
+            @CurrentUser User user) {
         Project project = new Project();
         project.setName(projectJson.getName());
         project.setDescription(projectJson.getDescription());
         project.setCreateAt(LocalDateTime.now());
         project.setUpdateAt(LocalDateTime.now());
         project = projectService.createProject(project);
-        projectService.addMember(user, project,"SuperAdmin");
+        projectService.addMember(user, project, "SuperAdmin");
         return projectService.projectToJson(project);
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProjectJson getProject(@PathVariable Integer id){
+    public ProjectJson getProject(@PathVariable Integer id) {
         Project project = getProjectOrThrow(id);
         return projectService.projectToJson(project);
     }
@@ -64,7 +66,7 @@ public class ProjectController {
     public void updateProject(
             @PathVariable Integer id,
             @RequestBody ProjectJson projectJson,
-            @CurrentUser User user){
+            @CurrentUser User user) {
         Project project = getProjectOrThrow(id);
         throwIfNotAdmin(user, project);
         project.setName(projectJson.getName());
@@ -93,7 +95,7 @@ public class ProjectController {
         Project project = getProjectOrThrow(projectId);
         throwIfNotMember(user, project);
         List<User> users = projectService.getMembers(project);
-        List<UserJson> jsons = new ArrayList<UserJson>();
+        List<UserJson> jsons = new ArrayList<>();
         users.forEach(u -> jsons.add(userService.userToJson(u)));
         return jsons;
     }
@@ -109,11 +111,11 @@ public class ProjectController {
         Project project = getProjectOrThrow(projectId);
         User opUser = getUserOrThrow(userId);
         throwIfNotSuperAdmin(user, project);
-        if(!projectService.isMemberOf(opUser, project)){
+        if (!projectService.isMemberOf(opUser, project)) {
             throw new BusinessException(BusinessErrorType.MEMBER_NOT_FOUND,
                     "User with id " + userId + "is not the member of project " + projectId);
         }
-        if(memberJson.getRole().equals("SuperAdmin")){
+        if (memberJson.getRole().equals("SuperAdmin")) {
             projectService.deleteMember(user, project);
             projectService.addMember(user, project, "Admin");
         }
@@ -131,12 +133,12 @@ public class ProjectController {
         Project project = getProjectOrThrow(projectId);
         User opUser = getUserOrThrow(userId);
         throwIfNotAdmin(user, project);
-        if(projectService.isSuperAdminOf(opUser, project)){
+        if (projectService.isSuperAdminOf(opUser, project)) {
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "Can't kick the super admin of the project. Super admins must transfer or delete the project before quitting.");
-        } else if(projectService.isAdminOf(opUser, project)){
+        } else if (projectService.isAdminOf(opUser, project)) {
             throwIfNotSuperAdmin(user, project);
-        } else if(projectService.isMemberOf(opUser, project)){
+        } else if (projectService.isMemberOf(opUser, project)) {
             throwIfNotAdmin(user, project);
         } else {
             throw new BusinessException(BusinessErrorType.MEMBER_NOT_FOUND,
@@ -211,13 +213,13 @@ public class ProjectController {
         task.setBody(json.getBody());
         projectService.updateTask(task);
         List<User> oldExecutors = projectService.getExecutors(task.getId());
-        for(User u:oldExecutors){
-            if(json.getExecutors().stream().noneMatch(u2 -> u.getId() == u2.getId())){
+        for (User u : oldExecutors) {
+            if (json.getExecutors().stream().noneMatch(u2 -> u.getId() == u2.getId())) {
                 projectService.deleteExecutor(id, u.getId());
             }
         }
-        for(UserJson u:json.getExecutors()){
-            if(oldExecutors.stream().noneMatch(u2 -> u.getId() == u2.getId())){
+        for (UserJson u : json.getExecutors()) {
+            if (oldExecutors.stream().noneMatch(u2 -> u.getId() == u2.getId())) {
                 projectService.addExecutor(id, u.getId());
             }
         }
@@ -246,7 +248,7 @@ public class ProjectController {
     public void deleteTask(
             @PathVariable Integer projectId,
             @PathVariable Integer id,
-            @CurrentUser User user){
+            @CurrentUser User user) {
         Project project = getProjectOrThrow(projectId);
         throwIfNotAdmin(user, project);
         projectService.deleteTask(id);
@@ -386,35 +388,36 @@ public class ProjectController {
         projectService.rejectInvitation(user, invitation);
     }*/
 
-    private void throwIfNotMember(User user, Project project){
-        if(!projectService.isMemberOf(user, project)){
+    private void throwIfNotMember(User user, Project project) {
+        if (!projectService.isMemberOf(user, project)) {
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + user.getNickname() + " is not the member of " + project.getName() + ".");
         }
     }
-    private void throwIfMember(User user, Project project){
-        if(projectService.isMemberOf(user, project)){
+
+    private void throwIfMember(User user, Project project) {
+        if (projectService.isMemberOf(user, project)) {
             throw new BusinessException(BusinessErrorType.RECEIVER_ALREADY_IN_PROJECT,
                     "User " + user.getNickname() + " is already the member of " + project.getName() + ".");
         }
     }
 
-    private void throwIfNotEqual(User currentUser, int expectedUserId){
-        if(currentUser.getId() != expectedUserId){
+    private void throwIfNotEqual(User currentUser, int expectedUserId) {
+        if (currentUser.getId() != expectedUserId) {
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + currentUser + " can not do the private operation of other users.");
         }
     }
 
-    private void throwIfNotAdmin(User user, Project project){
-        if(!projectService.isAdminOf(user, project)){
+    private void throwIfNotAdmin(User user, Project project) {
+        if (!projectService.isAdminOf(user, project)) {
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + user.getNickname() + " is not the admin of " + project.getName() + ".");
         }
     }
 
-    private void throwIfNotSuperAdmin(User user, Project project){
-        if(!projectService.isSuperAdminOf(user, project)){
+    private void throwIfNotSuperAdmin(User user, Project project) {
+        if (!projectService.isSuperAdminOf(user, project)) {
             throw new BusinessException(BusinessErrorType.PERMISSION_DENIED,
                     "User " + user.getNickname() + " is not the super admin of " + project.getName() + ".");
         }
@@ -438,7 +441,7 @@ public class ProjectController {
         return user;
     }
 
-    private Task getTaskOrThrow(int taskId, int projectId){
+    private Task getTaskOrThrow(int taskId, int projectId) {
         Task task = projectService.getTaskById(taskId, projectId);
         if (task == null) {
             throw new BusinessException(BusinessErrorType.USER_NOT_FOUND,
@@ -447,7 +450,7 @@ public class ProjectController {
         return task;
     }
 
-    private Invitation getInvitationOrThrow(int invitationId, int projectId){
+    private Invitation getInvitationOrThrow(int invitationId, int projectId) {
         Invitation invitation = projectService.getInvitationById(invitationId);
         if (invitation == null || invitation.getProjectId() != projectId) {
             throw new BusinessException(BusinessErrorType.USER_NOT_FOUND,
@@ -456,7 +459,7 @@ public class ProjectController {
         return invitation;
     }
 
-    private CommentJson getCommentJsonOrThrow(int commentId, int taskId){
+    private CommentJson getCommentJsonOrThrow(int commentId, int taskId) {
         CommentJson json = projectService.getTaskCommentJson(taskId, commentId);
         if (json == null) {
             throw new BusinessException(BusinessErrorType.USER_NOT_FOUND,

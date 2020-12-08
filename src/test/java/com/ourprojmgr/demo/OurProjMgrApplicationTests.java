@@ -12,7 +12,7 @@ class OurProjMgrApplicationTests {
 
 
     @Test
-    void testProjectService(){
+    void testProjectService() {
 
     }
 }

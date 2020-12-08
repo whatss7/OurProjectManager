@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 /**
  * 表示项目成员的 JSON
+ *
  * @author 朱华彬
  */
 public class MemberJson {

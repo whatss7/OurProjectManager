@@ -5,6 +5,7 @@ import java.util.List;
 
 /**
  * 表示任务的 JSON
+ *
  * @author 朱华彬
  */
 public class TaskJson {

@@ -1,7 +1,5 @@
 package com.ourprojmgr.demo.exception;
 
-import org.springframework.http.HttpStatus;
-
 /**
  * 业务异常
  * <p/>

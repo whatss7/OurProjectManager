@@ -1,7 +1,7 @@
 package com.ourprojmgr.demo;
 
-import com.ourprojmgr.demo.controller.utility.LoginInterceptor;
 import com.ourprojmgr.demo.controller.utility.CurrentUserArgumentResolver;
+import com.ourprojmgr.demo.controller.utility.LoginInterceptor;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
