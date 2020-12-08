@@ -49,6 +49,7 @@ public interface IUserDao {
 
     /**
      * 获取用户参加的项目的数量
+     *
      * @param userId 用户id
      * @return 用户参加的项目的数量
      */
@@ -57,6 +58,7 @@ public interface IUserDao {
 
     /**
      * 获取用户参加的项目
+     *
      * @param userId 用户id
      * @return 用户参加的所有项目
      */
@@ -65,7 +67,8 @@ public interface IUserDao {
 
     /**
      * 获取用户参加的某个项目
-     * @param userId 用户id
+     *
+     * @param userId    用户id
      * @param projectId 项目id
      * @return 若不存在则返回null
      */
@@ -74,6 +77,7 @@ public interface IUserDao {
 
     /**
      * 获取用户收到的通知
+     *
      * @param userId 用户id
      * @return 用户收到的所有通知
      */
@@ -82,7 +86,8 @@ public interface IUserDao {
 
     /**
      * 获取用户收到的某条通知
-     * @param userId 用户id
+     *
+     * @param userId         用户id
      * @param notificationId 通知id
      * @return 若不存在则返回null
      */
@@ -91,6 +96,7 @@ public interface IUserDao {
 
     /**
      * 获取用户发送的通知
+     *
      * @param userId 用户id
      * @return 用户发送的所有通知
      */
@@ -99,7 +105,8 @@ public interface IUserDao {
 
     /**
      * 获取用户发送的某条通知
-     * @param userId 用户id
+     *
+     * @param userId         用户id
      * @param notificationId 通知id
      * @return 若不存在则返回null
      */
@@ -108,6 +115,7 @@ public interface IUserDao {
 
     /**
      * 获取项目的超级管理员
+     *
      * @param projectId 项目id
      * @return 项目的超级管理员
      */
@@ -116,6 +124,7 @@ public interface IUserDao {
 
     /**
      * 获取项目的管理员
+     *
      * @param projectId 项目id
      * @return 项目的所有管理员
      */
@@ -124,6 +133,7 @@ public interface IUserDao {
 
     /**
      * 更新通知
+     *
      * @param notification 新通知
      */
     @Update("update Notification set `read` = #{read}, title = #{title}, body = #{body}, createAt = #{createAt}, senderId = #{senderId}, receiverId = #{receiverId} where id = #{id}")
@@ -131,6 +141,7 @@ public interface IUserDao {
 
     /**
      * 保存通知
+     *
      * @param notification 新通知
      */
     @Insert("insert into Notification(`read`, title, body, createAt, senderId, receiverId) values(#{read}, #{title}, #{body}, #{createAt}, #{senderId}, #{receiverId})")

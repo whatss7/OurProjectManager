@@ -1,7 +1,5 @@
 package com.ourprojmgr.demo.jsonmodel;
 
-import com.ourprojmgr.demo.exception.BusinessErrorType;
-
 /**
  * 返回的响应消息
  *

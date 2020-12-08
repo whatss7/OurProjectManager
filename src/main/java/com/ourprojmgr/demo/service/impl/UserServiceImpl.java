@@ -56,7 +56,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public UserJson userToJson(User user) {
-        if(user == null){
+        if (user == null) {
             return null;
         }
         UserJson userJson = new UserJson();
@@ -79,7 +79,7 @@ public class UserServiceImpl implements IUserService {
      */
     @Override
     public void updatePassword(User user, String oldPassword, String newPassword) {
-        if(!isRightPassword(user, oldPassword)){   //旧密码不正确则抛异常
+        if (!isRightPassword(user, oldPassword)) {   //旧密码不正确则抛异常
             throw new BusinessException(BusinessErrorType.WRONG_OLD_PASSWORD, "wrong old password");
         }
         hashPasswordAndSet(user, newPassword);  //生成并设置哈希密码
@@ -125,10 +125,10 @@ public class UserServiceImpl implements IUserService {
         List<Project> projects = userDao.findProjectByUid(user.getId());
         //将Db Model Project 转化为 ProjectJson
         List<ProjectJson> projectJsons = new ArrayList<>();
-        for(Project p : projects){
+        for (Project p : projects) {
             projectJsons.add(projectToJson(p));
         }
-        return  projectJsons;
+        return projectJsons;
     }
 
     /**
@@ -143,32 +143,32 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 生成并设置用户的盐值，再根据盐值生成并设置用户的哈希密码
-     * @param user 用户
+     *
+     * @param user     用户
      * @param password 原始密码
      */
     @Override
-    public void hashPasswordAndSet(User user, String password){
+    public void hashPasswordAndSet(User user, String password) {
         user.setSalt(generateRandomSalt()); //生成并设置用户的盐值
         user.setHashedPassword(generateHashedPassword(password, user.getSalt())); //根据盐值生成并设置用户的哈希密码
     }
 
     /**
      * 检查原始密码是否正确
-     * @param user 用户
+     *
+     * @param user     用户
      * @param password 原始密码
      * @return
      */
     @Override
-    public boolean isRightPassword(User user, String password){
+    public boolean isRightPassword(User user, String password) {
         String hashedPassword = generateHashedPassword(password, user.getSalt());  //生成哈希密码
-        if(hashedPassword.equals(user.getHashedPassword())){
-            return true;
-        }
-        return false;
+        return hashedPassword.equals(user.getHashedPassword());
     }
 
     /**
      * 删除用户
+     *
      * @param user 用户
      */
     @Override
@@ -178,7 +178,8 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 获取该用户参与的某个项目
-     * @param user 用户
+     *
+     * @param user      用户
      * @param projectId 项目id
      * @return ProjectJson 项目Json
      */
@@ -189,6 +190,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 获取该用户收到的通知
+     *
      * @param user 用户
      * @return List<NotificationJson> 用户收到的所有通知
      */
@@ -197,7 +199,7 @@ public class UserServiceImpl implements IUserService {
         List<Notification> notifications = userDao.findRecvNotifications(user.getId());
         //将Db Model Notification 转化为 NotificationJson
         List<NotificationJson> notificationJsons = new ArrayList<>();
-        for(Notification n:notifications){
+        for (Notification n : notifications) {
             notificationJsons.add(notificationToJson(n));
         }
         return notificationJsons;
@@ -205,7 +207,8 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 获取该用户收到的某条通知
-     * @param user 用户
+     *
+     * @param user           用户
      * @param notificationId 通知id
      * @return NotificationJson 通知Json
      */
@@ -216,6 +219,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 获取该用户发送的通知
+     *
      * @param user 用户
      * @return List<NotificationJson> 用户发送的所有通知
      */
@@ -224,7 +228,7 @@ public class UserServiceImpl implements IUserService {
         List<Notification> notifications = userDao.findSendNotifications(user.getId());
         //将Db Model Notification 转化为 NotificationJson
         List<NotificationJson> notificationJsons = new ArrayList<>();
-        for(Notification n:notifications){
+        for (Notification n : notifications) {
             notificationJsons.add(notificationToJson(n));
         }
         return notificationJsons;
@@ -232,7 +236,8 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 获取该用户发送的某条通知
-     * @param user 用户
+     *
+     * @param user           用户
      * @param notificationId 通知id
      * @return NotificationJson 通知Json
      */
@@ -243,7 +248,8 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 获取该用户发送的某条通知
-     * @param user 用户
+     *
+     * @param user           用户
      * @param notificationId 通知id
      * @return Notification 通知
      */
@@ -254,6 +260,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 更新通知
+     *
      * @param notification 新通知
      */
     @Override
@@ -263,6 +270,7 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 保存通知
+     *
      * @param notification 新通知
      */
     @Override
@@ -272,24 +280,26 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 生成哈希密码
+     *
      * @param password 原始密码
-     * @param salt 盐
+     * @param salt     盐
      * @return String 生成的哈希密码
      */
-    private String generateHashedPassword(String password, String salt){
+    private String generateHashedPassword(String password, String salt) {
         return DigestUtils.md5DigestAsHex((password + salt).getBytes());
     }
 
     /**
      * 生成随机盐
+     *
      * @return String 生成的随机盐
      */
-    private String generateRandomSalt(){
+    private String generateRandomSalt() {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuilder sb = new StringBuilder();
         //生成8个随机字符
-        for(int i = 0; i < 8; ++i){
+        for (int i = 0; i < 8; ++i) {
             int index = random.nextInt(62);
             sb.append(str.charAt(index));
         }
@@ -299,11 +309,12 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * 将Db Model Notification 转化为 Json Notification
+     *
      * @param notification Notification类型的通知
      * @return NotificationJson NotificationJson类型的通知
      */
-    private NotificationJson notificationToJson(Notification notification){
-        if(notification == null){
+    private NotificationJson notificationToJson(Notification notification) {
+        if (notification == null) {
             return null;
         }
         NotificationJson notificationJson = new NotificationJson();
@@ -319,11 +330,12 @@ public class UserServiceImpl implements IUserService {
 
     /**
      * //将Db Model Project 转化为 Json Project
+     *
      * @param project Project类型的通知
      * @return ProjectJson ProjectJson类型的通知
      */
-    private ProjectJson projectToJson(Project project){
-        if(project == null){
+    private ProjectJson projectToJson(Project project) {
+        if (project == null) {
             return null;
         }
         ProjectJson projectJson = new ProjectJson();
@@ -336,7 +348,7 @@ public class UserServiceImpl implements IUserService {
         List<User> admins = userDao.getAdminsByProjectId(project.getId());
         //将 Db Model User 转化为 Json User
         List<UserJson> adminJsons = new ArrayList<>();
-        for(User u: admins){
+        for (User u : admins) {
             adminJsons.add(userToJson(u));
         }
         projectJson.setAdmins(adminJsons);
