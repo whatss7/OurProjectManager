@@ -252,7 +252,7 @@ public class ProjectController {
         projectService.deleteTask(id);
     }
 
-    @GetMapping("/{projectId}/tasks/{taskId}/comments")
+    /*@GetMapping("/{projectId}/tasks/{taskId}/comments")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
     public List<CommentJson> getComments(
@@ -311,9 +311,9 @@ public class ProjectController {
         getTaskOrThrow(projectId, taskId);
         getCommentJsonOrThrow(id, taskId);
         projectService.deleteComment(id);
-    }
+    }*/
 
-    @PostMapping("/{projectId}/invitations")
+    /*@PostMapping("/{projectId}/invitations")
     @ResponseStatus(HttpStatus.CREATED)
     @LoginRequired
     public InvitationJson sendInvitation(
@@ -384,7 +384,7 @@ public class ProjectController {
         Invitation invitation = getInvitationOrThrow(id, projectId);
         throwIfNotEqual(user, invitation.getReceiverId());
         projectService.rejectInvitation(user, invitation);
-    }
+    }*/
 
     private void throwIfNotMember(User user, Project project){
         if(!projectService.isMemberOf(user, project)){

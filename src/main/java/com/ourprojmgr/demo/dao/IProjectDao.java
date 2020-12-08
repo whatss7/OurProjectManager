@@ -34,7 +34,7 @@ public interface IProjectDao {
 	public int getMemberCount(int userId, int projectId);
 
 	@Select("select count(*) from Member where userId = #{userId} and projectId = #{projectId} and role = #{role}")
-	public int getMemberCount(int userId, int projectId, String role);
+	public int getMemberRoleCount(int userId, int projectId, String role);
 
 	@Insert("insert into Member(userId, projectId, role, joinAt) values(#{userId}, #{projectId}, #{role}, #{joinAt})")
 	public void insertMember(int userId, int projectId, String role, LocalDateTime joinAt);

@@ -80,13 +80,13 @@ public class ProjectServiceImpl implements IProjectService {
     @Override
     public boolean isSuperAdminOf(User user, Project project) {
         return
-                projectDao.getMemberCount(user.getId(), project.getId(), "SuperAdmin")!= 0;
+                projectDao.getMemberRoleCount(user.getId(), project.getId(), "SuperAdmin")!= 0;
     }
 
     @Override
     public boolean isAdminOf(User user, Project project) {
-        return projectDao.getMemberCount(user.getId(), project.getId(), "Admin")  +
-                projectDao.getMemberCount(user.getId(), project.getId(), "SuperAdmin")!= 0;
+        return projectDao.getMemberRoleCount(user.getId(), project.getId(), "Admin")  +
+                projectDao.getMemberRoleCount(user.getId(), project.getId(), "SuperAdmin")!= 0;
     }
 
     @Override
