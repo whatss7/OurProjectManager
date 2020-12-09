@@ -83,6 +83,23 @@ public class ProjectController {
         projectService.deleteProject(project.getId());
     }
 
+    /**
+     * 当前用户是否是项目成员
+     *
+     * @param projectId 项目 ID
+     * @param user      当前用户
+     */
+    @GetMapping("/{projectId}/ismember")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
+    public boolean isMember(
+            @PathVariable Integer projectId,
+            @CurrentUser User user) {
+        Project project = getProjectOrThrow(projectId);
+        Member member = projectService.getMember(project, user.getId());
+        return member != null;
+    }
+
     @GetMapping("/{projectId}/members")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
