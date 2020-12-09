@@ -14,7 +14,7 @@ public class Task {
     private int creatorId;
     private boolean complete;
     private LocalDateTime completeAt;
-    private int completerId;
+    private Integer completerId;
 
     public int getId() {
         return id;
@@ -80,11 +80,11 @@ public class Task {
         this.completeAt = completeAt;
     }
 
-    public int getCompleterId() {
+    public Integer getCompleterId() {
         return completerId;
     }
 
-    public void setCompleterId(int completerId) {
+    public void setCompleterId(Integer completerId) {
         this.completerId = completerId;
     }
 

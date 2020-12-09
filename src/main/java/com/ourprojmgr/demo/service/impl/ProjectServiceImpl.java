@@ -229,7 +229,8 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public Task createTask(Task task) {
-        return projectDao.insertTask(task);
+        projectDao.insertTask(task);
+        return task;
     }
 
     @Override
@@ -259,14 +260,20 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public TaskJson taskToJson(Task task) {
-        if (task == null) return null;
+        if (task == null) {
+            return null;
+        }
         TaskJson json = new TaskJson();
         json.setBody(task.getBody());
         json.setCommentNum(projectDao.getCommentCount(task.getId()));
         json.setComplete(task.isComplete());
         json.setCompleteAt(task.getCompleteAt());
-        User completer = userDao.getUserById(task.getCompleterId());
-        json.setCompleter(userService.userToJson(completer));
+        if (task.getCompleterId() == null) {
+            json.setCompleter(null);
+        } else {
+            User completer = userDao.getUserById(task.getCompleterId());
+            json.setCompleter(userService.userToJson(completer));
+        }
         json.setCreateAt(task.getCreateAt());
         User creator = userDao.getUserById(task.getCreatorId());
         json.setCreator(userService.userToJson(creator));
