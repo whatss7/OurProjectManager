@@ -2,10 +2,7 @@ package com.ourprojmgr.demo.controller;
 
 import com.ourprojmgr.demo.controller.utility.CurrentUser;
 import com.ourprojmgr.demo.controller.utility.LoginRequired;
-import com.ourprojmgr.demo.dbmodel.Invitation;
-import com.ourprojmgr.demo.dbmodel.Project;
-import com.ourprojmgr.demo.dbmodel.Task;
-import com.ourprojmgr.demo.dbmodel.User;
+import com.ourprojmgr.demo.dbmodel.*;
 import com.ourprojmgr.demo.exception.BusinessErrorType;
 import com.ourprojmgr.demo.exception.BusinessException;
 import com.ourprojmgr.demo.jsonmodel.*;
@@ -89,16 +86,36 @@ public class ProjectController {
     @GetMapping("/{projectId}/members")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
-    public List<UserJson> getMembers(
+    public List<MemberJson> getMembers(
             @PathVariable Integer projectId,
             @CurrentUser User user) {
         Project project = getProjectOrThrow(projectId);
         throwIfNotMember(user, project);
-        List<User> users = projectService.getMembers(project);
-        List<UserJson> jsons = new ArrayList<>();
-        users.forEach(u -> jsons.add(userService.userToJson(u)));
+        List<Member> members = projectService.getMembers(project);
+        List<MemberJson> jsons = new ArrayList<>();
+        for (var member : members) {
+            jsons.add(projectService.memberToJson(member));
+        }
         return jsons;
     }
+
+    @GetMapping("/{projectId}/members/{userId}")
+    @ResponseStatus(HttpStatus.OK)
+    @LoginRequired
+    public MemberJson getMember(
+            @PathVariable Integer projectId,
+            @PathVariable Integer userId,
+            @CurrentUser User user) {
+        Project project = getProjectOrThrow(projectId);
+        throwIfNotMember(user, project);
+        Member member = projectService.getMember(project, userId);
+        if (member == null) {
+            throw new BusinessException(BusinessErrorType.MEMBER_NOT_FOUND,
+                    "User with id " + userId + " is not the member of project " + projectId);
+        }
+        return projectService.memberToJson(projectService.getMember(project, userId));
+    }
+
 
     @PatchMapping("/{projectId}/members/{userId}")
     @ResponseStatus(HttpStatus.OK)
@@ -113,7 +130,7 @@ public class ProjectController {
         throwIfNotSuperAdmin(user, project);
         if (!projectService.isMemberOf(opUser, project)) {
             throw new BusinessException(BusinessErrorType.MEMBER_NOT_FOUND,
-                    "User with id " + userId + "is not the member of project " + projectId);
+                    "User with id " + userId + " is not the member of project " + projectId);
         }
         if (memberJson.getRole().equals("SuperAdmin")) {
             projectService.deleteMember(user, project);

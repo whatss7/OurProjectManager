@@ -16,7 +16,7 @@ public interface IProjectDao {
     Project getProjectById(int id);
 
     @Insert("insert into Project(id, name, description, createAt, updateAt) values (#{id}, #{name}, #{description}, #{createAt}, #{updateAt})")
-    @Options(useGeneratedKeys=true)
+    @Options(useGeneratedKeys = true)
     void insertProject(Project project);
 
     @Update("update Project set name = #{name}, description = #{description}, createAt = #{createAt}. updateAt = #{updateAt} where id = #{id}")
@@ -27,8 +27,14 @@ public interface IProjectDao {
     //endregion
 
     //region Member Methods
-    @Select("select u.* from User u, Member m where u.id = m.userId and m.projectId = #{projectId}")
-    List<User> getAllMembers(int projectId);
+    //@Select("select u.* from User u, Member m where u.id = m.userId and m.projectId = #{projectId}")
+    //List<User> getAllMembers(int projectId);
+
+    @Select("select * from Member where projectId = #{projectId}")
+    List<Member> getMembersInProject(int projectId);
+
+    @Select("select * from Member where userId = #{userId} and projectId = #{projectId}")
+    Member getMember(int userId, int projectId);
 
     @Select("select count(*) from Member where userId = #{userId} and projectId = #{projectId}")
     int getMemberCount(int userId, int projectId);

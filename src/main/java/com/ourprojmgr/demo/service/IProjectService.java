@@ -1,10 +1,7 @@
 package com.ourprojmgr.demo.service;
 
 import com.ourprojmgr.demo.dbmodel.*;
-import com.ourprojmgr.demo.jsonmodel.CommentJson;
-import com.ourprojmgr.demo.jsonmodel.InvitationJson;
-import com.ourprojmgr.demo.jsonmodel.ProjectJson;
-import com.ourprojmgr.demo.jsonmodel.TaskJson;
+import com.ourprojmgr.demo.jsonmodel.*;
 
 import java.util.List;
 
@@ -12,6 +9,8 @@ import java.util.List;
  * 与项目有关的业务逻辑
  */
 public interface IProjectService {
+
+    //region Project
 
     /**
      * 按照 ID 获取项目
@@ -37,6 +36,9 @@ public interface IProjectService {
     void updateProject(Project project);
 
     void deleteProject(int projectId);
+    //endregion
+
+    //region Member
 
     /**
      * 是否为项目的 Admin
@@ -53,11 +55,18 @@ public interface IProjectService {
      */
     boolean isMemberOf(User user, Project project);
 
-    List<User> getMembers(Project project);
+    List<Member> getMembers(Project project);
+
+    Member getMember(Project project, int userId);
 
     void addMember(User user, Project project, String role);
 
     void deleteMember(User user, Project project);
+
+    MemberJson memberToJson(Member member);
+    //endregion
+
+    //region Invitation
 
     /**
      * 按 ID 获取邀请
@@ -133,14 +142,9 @@ public interface IProjectService {
      *                                                         </ol>
      */
     void cancelInvitation(User admin, Invitation invitation);
+    //endregion
 
-    /**
-     * 获取某项任务下的所有评论
-     *
-     * @param taskId 任务id
-     * @return List<CommentJson> 任务下的所有评论的Json
-     */
-    List<CommentJson> getTaskCommentJsons(int taskId);
+    //region Task
 
     /**
      * 按照id获取任务
@@ -156,15 +160,6 @@ public interface IProjectService {
 
     List<User> getExecutors(int taskId);
 
-    /**
-     * 获取某项任务下的某条评论
-     *
-     * @param taskId    任务id
-     * @param commentId 评论id
-     * @return CommentJson 评论的Json
-     */
-    CommentJson getTaskCommentJson(int taskId, int commentId);
-
     void updateTask(Task task);
 
     TaskJson taskToJson(Task task);
@@ -174,6 +169,26 @@ public interface IProjectService {
     void addExecutor(int taskId, int executorId);
 
     void deleteExecutor(int taskId, int executorId);
+    //endregion
+
+    //region Comment
+
+    /**
+     * 获取某项任务下的所有评论
+     *
+     * @param taskId 任务id
+     * @return List<CommentJson> 任务下的所有评论的Json
+     */
+    List<CommentJson> getTaskCommentJsons(int taskId);
+
+    /**
+     * 获取某项任务下的某条评论
+     *
+     * @param taskId    任务id
+     * @param commentId 评论id
+     * @return CommentJson 评论的Json
+     */
+    CommentJson getTaskCommentJson(int taskId, int commentId);
 
     /**
      * 保存评论
@@ -197,6 +212,5 @@ public interface IProjectService {
      * @return JSON Model
      */
     CommentJson commentToJson(Comment comment);
-
-    //请自行添加其他方法
+    //endregion
 }

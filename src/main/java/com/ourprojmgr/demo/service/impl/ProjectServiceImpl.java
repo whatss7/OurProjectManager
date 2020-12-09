@@ -26,7 +26,9 @@ public class ProjectServiceImpl implements IProjectService {
     private final IUserService userService;
 
     @Autowired
-    public ProjectServiceImpl(IProjectDao projectDao, IUserDao userDao, IUserService userService) {
+    public ProjectServiceImpl(IProjectDao projectDao,
+                              IUserDao userDao,
+                              IUserService userService) {
         this.projectDao = projectDao;
         this.userDao = userDao;
         this.userService = userService;
@@ -95,8 +97,13 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public List<User> getMembers(Project project) {
-        return projectDao.getAllMembers(project.getId());
+    public List<Member> getMembers(Project project) {
+        return projectDao.getMembersInProject(project.getId());
+    }
+
+    @Override
+    public Member getMember(Project project, int userId) {
+        return projectDao.getMember(userId, project.getId());
     }
 
     @Override
@@ -108,6 +115,18 @@ public class ProjectServiceImpl implements IProjectService {
     public void deleteMember(User user, Project project) {
         projectDao.deleteMember(user.getId(), project.getId());
     }
+
+    @Override
+    public MemberJson memberToJson(Member member) {
+        var json = new MemberJson();
+        UserJson userJson = userService.userToJson(
+                userService.getUserById(member.getUserId()));
+        json.setUser(userJson);
+        json.setJoinAt(member.getJoinAt());
+        json.setRole(member.getRole());
+        return json;
+    }
+
     //endregion
 
     //region Invitation Methods

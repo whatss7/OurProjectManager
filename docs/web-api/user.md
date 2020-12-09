@@ -229,8 +229,6 @@ HTTP 403 Forbidden
 ### 用户不存在
 ### 无 token 或 token 非法
 ### 操作者不是对应的用户
-
-
 # DELETE /api/users/{username} 注销用户
 只有自己才能注销自己。
 

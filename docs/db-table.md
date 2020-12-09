@@ -38,17 +38,17 @@ CREATE TABLE User(
 
 ```sql
 CREATE TABLE Notification(
-     id  INT UNSIGNED AUTO_INCREMENT, 
-     `read` BOOLEAN NOT NULL,
-     title VARCHAR(255) NOT NULL,
-     body VARCHAR(255),
-     createAt DATETIME,
-     senderId INT UNSIGNED NOT NULL,
-     receiverId INT UNSIGNED NOT NULL,
-     PRIMARY KEY(id),
-     FOREIGN KEY(senderId) REFERENCES User(id) ON DELETE CASCADE,
-     FOREIGN KEY(receiverId) REFERENCES User(id) ON DELETE CASCADE
-  )ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    id  INT UNSIGNED AUTO_INCREMENT, 
+    `read` BOOLEAN NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    body VARCHAR(255),
+    createAt DATETIME,
+    senderId INT UNSIGNED NOT NULL,
+    receiverId INT UNSIGNED NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(senderId) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY(receiverId) REFERENCES User(id) ON DELETE CASCADE
+)ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
 # Projects 表
@@ -63,12 +63,12 @@ CREATE TABLE Notification(
 
 ```sql
 CREATE TABLE Project(
-     id INT UNSIGNED AUTO_INCREMENT, 
-     name VARCHAR(255) NOT NULL, 
-     description VARCHAR(255), 
-     createAt DATETIME,
-     updateAt DATETIME,
-     PRIMARY KEY(id)
+    id INT UNSIGNED AUTO_INCREMENT, 
+    name VARCHAR(255) NOT NULL, 
+    description VARCHAR(255), 
+    createAt DATETIME,
+    updateAt DATETIME,
+    PRIMARY KEY(id)
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 # Members 表
@@ -81,10 +81,10 @@ CREATE TABLE Project(
 
 ```sql
 CREATE TABLE Member(
-     userId INT UNSIGNED NOT NULL,
-     projectId INT UNSIGNED NOT NULL,
-     role VARCHAR(255) NOT NULL, 
-     joinAt DATETIME,
+    userId INT UNSIGNED NOT NULL,
+    projectId INT UNSIGNED NOT NULL,
+    role VARCHAR(255) NOT NULL, 
+    joinAt DATETIME,
     PRIMARY KEY(userId, projectId),
     FOREIGN KEY(userId) REFERENCES User(id) ON DELETE CASCADE,
     FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE
@@ -106,19 +106,19 @@ CREATE TABLE Member(
 
 ```sql
 CREATE TABLE Task(
-      id INT UNSIGNED AUTO_INCREMENT, 
-      projectId INT UNSIGNED NOT NULL,
-      title  VARCHAR(255) NOT NULL, 
-      body  VARCHAR(255),
-      createAt DATETIME,
-      creatorId INT UNSIGNED NOT NULL,
-      complete BOOLEAN NOT NULL,
-      completeAt DATETIME,
-      completerId INT UNSIGNED,
-      PRIMARY KEY(id),
-      FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE,
-      FOREIGN KEY(creatorId) REFERENCES User(id) ON DELETE CASCADE,
-     FOREIGN KEY(completerId) REFERENCES User(id) ON DELETE CASCADE
+    id INT UNSIGNED AUTO_INCREMENT, 
+    projectId INT UNSIGNED NOT NULL,
+    title  VARCHAR(255) NOT NULL, 
+    body  VARCHAR(255),
+    createAt DATETIME,
+    creatorId INT UNSIGNED NOT NULL,
+    complete BOOLEAN NOT NULL,
+    completeAt DATETIME,
+    completerId INT UNSIGNED,
+    PRIMARY KEY(id),
+    FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE,
+    FOREIGN KEY(creatorId) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY(completerId) REFERENCES User(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
@@ -130,11 +130,11 @@ CREATE TABLE Task(
 
 ```sql
 CREATE TABLE TaskExecutor(
-     taskId INT UNSIGNED NOT NULL,
-     executorId INT UNSIGNED NOT NULL,
-     PRIMARY KEY(taskId, executorId),
-     FOREIGN KEY(taskId) REFERENCES Task(id) ON DELETE CASCADE,
-     FOREIGN KEY(executorId) REFERENCES User(id) ON DELETE CASCADE
+    taskId INT UNSIGNED NOT NULL,
+    executorId INT UNSIGNED NOT NULL,
+    PRIMARY KEY(taskId, executorId),
+    FOREIGN KEY(taskId) REFERENCES Task(id) ON DELETE CASCADE,
+    FOREIGN KEY(executorId) REFERENCES User(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
@@ -149,14 +149,14 @@ CREATE TABLE TaskExecutor(
 
 ```sql
 CREATE Table Comment(
-     id INT UNSIGNED AUTO_INCREMENT, 
-     taskId INT UNSIGNED NOT NULL,
-     body VARCHAR(255) NOT NULL,
-     createAt DATETIME NOT NULL,
-     userId INT UNSIGNED NOT NULL,
-     PRIMARY KEY(id),
-     FOREIGN KEY(taskId) REFERENCES Task(id) ON DELETE CASCADE,
-     FOREIGN KEY(userId) REFERENCES User(id) ON DELETE CASCADE
+    id INT UNSIGNED AUTO_INCREMENT, 
+    taskId INT UNSIGNED NOT NULL,
+    body VARCHAR(255) NOT NULL,
+    createAt DATETIME NOT NULL,
+    userId INT UNSIGNED NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(taskId) REFERENCES Task(id) ON DELETE CASCADE,
+    FOREIGN KEY(userId) REFERENCES User(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
 
@@ -173,17 +173,16 @@ CREATE Table Comment(
 
 ```sql
 CREATE Table Invitation(
-      id INT UNSIGNED AUTO_INCREMENT, 
-      createAt DATETIME NOT NULL,
-      endAt DATETIME NOT NULL,
-      status VARCHAR(255) NOT NULL, 
-      senderId INT UNSIGNED NOT NULL,
-      receiverId INT UNSIGNED NOT NULL,
-      projectId INT UNSIGNED NOT NULL,
-      PRIMARY KEY(id),
-      FOREIGN KEY(senderId) REFERENCES User(id) ON DELETE CASCADE,
-      FOREIGN KEY(receiverId) REFERENCES User(id) ON DELETE CASCADE,
-      FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE
+    id INT UNSIGNED AUTO_INCREMENT, 
+    createAt DATETIME NOT NULL,
+    endAt DATETIME NOT NULL,
+    status VARCHAR(255) NOT NULL, 
+    senderId INT UNSIGNED NOT NULL,
+    receiverId INT UNSIGNED NOT NULL,
+    projectId INT UNSIGNED NOT NULL,
+    PRIMARY KEY(id),
+    FOREIGN KEY(senderId) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY(receiverId) REFERENCES User(id) ON DELETE CASCADE,
+    FOREIGN KEY(projectId) REFERENCES Project(id) ON DELETE CASCADE
 )ENGINE=InnoDB DEFAULT CHARSET=utf8;
 ```
-
