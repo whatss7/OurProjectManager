@@ -175,8 +175,8 @@ CREATE Table Comment(
 CREATE Table Invitation(
     id INT UNSIGNED AUTO_INCREMENT, 
     createAt DATETIME NOT NULL,
-    endAt DATETIME NOT NULL,
-    status VARCHAR(255) NOT NULL, 
+    endAt DATETIME,
+    status VARCHAR(255) NOT NULL,
     senderId INT UNSIGNED NOT NULL,
     receiverId INT UNSIGNED NOT NULL,
     projectId INT UNSIGNED NOT NULL,

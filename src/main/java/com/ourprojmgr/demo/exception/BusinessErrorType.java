@@ -61,13 +61,17 @@ public enum BusinessErrorType {
      */
     INVITATION_NOT_FOUND("InvitationNotFound", HttpStatus.NOT_FOUND),
     /**
-     * 邀请已存在
-     */
-    INVITATION_ALREADY_EXIST("InvitationAlreadyExist", HttpStatus.CONFLICT),
-    /**
      * 邀请接收者已在项目中
      */
-    RECEIVER_ALREADY_IN_PROJECT("ReceiverAlreadyInProject", HttpStatus.CONFLICT);
+    RECEIVER_ALREADY_IN_PROJECT("ReceiverAlreadyInProject", HttpStatus.CONFLICT),
+    /**
+     * 邀请已过期
+     */
+    INVITATION_EXPIRED("InvitationExpired", HttpStatus.CONFLICT),
+    /**
+     * 不是邀请的接收者
+     */
+    NOT_INVITATION_RECEIVER("NotInvitationReceiver", HttpStatus.FORBIDDEN);
 
 
     private final String type;

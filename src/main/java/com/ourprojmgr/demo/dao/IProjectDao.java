@@ -56,7 +56,8 @@ public interface IProjectDao {
     @Select("select * from Invitation where projectId = #{projectId} and receiverId = #{receiverId} and status = #{status}")
     Invitation getInvitationByReceiver(int projectId, int receiverId, String status);
 
-    @Insert("insert into Invitation(id, createAt, endAt, status, senderId, receiverId, projectId) values(#{id}, #{createAt}, #{endAt}, #{status}, #{senderId}, #{receiverId}, #{projectId}")
+    @Insert("insert into Invitation(id, createAt, endAt, status, senderId, receiverId, projectId) values(#{id}, #{createAt}, #{endAt}, #{status}, #{senderId}, #{receiverId}, #{projectId})")
+    @Options(useGeneratedKeys = true)
     void insertInvitation(Invitation invitation);
 
     @Select("select * from Invitation where projectId = #{projectId}")

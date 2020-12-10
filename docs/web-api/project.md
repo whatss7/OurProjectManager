@@ -134,7 +134,6 @@
     - [发送邀请成功](#发送邀请成功)
     - [项目不存在](#项目不存在-7)
     - [用户不存在](#用户不存在)
-    - [邀请已存在](#邀请已存在)
     - [接收者已在项目中](#接收者已在项目中)
     - [无 token 或 token 无效](#无-token-或-token-无效-17)
     - [不是本项目的 Admin](#不是本项目的-admin-4)
@@ -151,18 +150,19 @@
     - [获取邀请成功](#获取邀请成功-1)
     - [邀请不存在](#邀请不存在)
     - [无 token 或 token 无效](#无-token-或-token-无效-19)
-    - [不是本项目的 Admin](#不是本项目的-admin-6)
+    - [不是本项目的 Admin 或不是邀请接收者](#不是本项目的-admin-或不是邀请接收者)
 - [GET /api/projects/{projectId}/invitations/{id}/cancel 取消邀请](#get-apiprojectsprojectidinvitationsidcancel-取消邀请)
   - [请求头](#请求头-20)
   - [应答](#应答-21)
     - [取消邀请成功](#取消邀请成功)
     - [邀请不存在](#邀请不存在-1)
     - [无 token 或 token 无效](#无-token-或-token-无效-20)
-    - [不是本项目的 Admin](#不是本项目的-admin-7)
+    - [不是本项目的 Admin](#不是本项目的-admin-6)
 - [GET /api/projects/{projectId}/invitations/{id}/accept 接受邀请](#get-apiprojectsprojectidinvitationsidaccept-接受邀请)
   - [请求头](#请求头-21)
   - [应答](#应答-22)
     - [接受邀请成功](#接受邀请成功)
+    - [邀请不是 created 状态（邀请已过期）](#邀请不是-created-状态邀请已过期)
     - [邀请不存在](#邀请不存在-2)
     - [无 token 或 token 无效](#无-token-或-token-无效-21)
 - [GET /api/projects/{projectId}/invitations/{id}/reject 拒绝邀请](#get-apiprojectsprojectidinvitationsidreject-拒绝邀请)
@@ -657,16 +657,6 @@ HTTP 404 Not Found
 }
 ```
 
-### 邀请已存在
-HTTP 409 Conflict
-
-```json
-{
-    "type": "InvitationAlreadyExist",
-    "message": "..."
-}
-```
-
 ### 接收者已在项目中
 HTTP 409 Conflict
 
@@ -697,7 +687,7 @@ HTTP 200 OK
 ### 不是本项目的 Admin
 
 # GET /api/projects/{projectId}/invitations/{id} 查看某个已发送的邀请
-只有本项目 Admin 以上才能查看邀请。
+本项目 Admin 以上或邀请的接收者才能查看邀请。
 
 ## 请求头
 需要在 Authorization 头信息中包含 token。
@@ -719,7 +709,7 @@ HTTP 404 Not Found
 ```
 
 ### 无 token 或 token 无效
-### 不是本项目的 Admin
+### 不是本项目的 Admin 或不是邀请接收者
 
 # GET /api/projects/{projectId}/invitations/{id}/cancel 取消邀请
 只有本项目 Admin 以上才能取消邀请。
@@ -753,6 +743,16 @@ HTTP 404 Not Found
 ## 应答
 ### 接受邀请成功
 HTTP 200 OK
+
+### 邀请不是 created 状态（邀请已过期）
+HTTP 409 Conflict
+
+```json
+{
+    "type": "InvitationExpired",
+    "message": "..."
+}
+```
 
 ### 邀请不存在
 HTTP 404 Not Found

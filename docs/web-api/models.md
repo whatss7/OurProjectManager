@@ -382,6 +382,7 @@
 | 评论不存在           | CommentNotFound          | 404 Not Found             |
 | 成员不存在           | MemberNotFound           | 404 Not Found             |
 | 未知错误             | UnknownError             | 500 Internal Server Error |
-| 邀请已存在           | InvitationAlreadyExist   | 409 Conflict              |
 | 邀请接收者已在项目中 | ReceiverAlreadyInProject | 409 Conflict              |
 | 邀请不存在           | InvitationNotFound       | 404 Not Found             |
+| 邀请已过期           | InvitationExpired        | 409 Conflict              |
+| 不是邀请的接收者     | NotInvitationReceiver    | 403 Forbidden             |
