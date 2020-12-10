@@ -157,7 +157,7 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public Invitation sendInvitation(User sender, User receiver, Project project) {
-        if (isMemberOfProject(sender, project)) {
+        if (isMemberOfProject(receiver, project)) {
             throw new BusinessException(
                     BusinessErrorType.RECEIVER_ALREADY_IN_PROJECT,
                     "Receiver with uid " + receiver.getId() + " is already in project.");
