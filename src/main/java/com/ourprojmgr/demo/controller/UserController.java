@@ -288,7 +288,7 @@ public class UserController {
      * @param receiverUsername 接收者的用户名
      * @param notificationJson 发送的通知
      */
-    @PostMapping("/{username}/sendNotifications")
+    @PostMapping("/{username}/notifications")
     @ResponseStatus(HttpStatus.CREATED)
     @LoginRequired
     public void sendNotification(@CurrentUser User sender,
