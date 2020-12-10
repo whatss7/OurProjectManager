@@ -205,17 +205,21 @@ public class ProjectController {
         Project project = getProjectOrThrow(projectId);
         throwIfNotAdmin(user, project);
         Task task = new Task();
-        task.setBody(taskJson.getBody());
-        task.setComplete(taskJson.isComplete());
-        task.setCompleteAt(taskJson.getCompleteAt());
-        task.setCompleterId(taskJson.getCompleter().getId());
-        task.setCreateAt(LocalDateTime.now());
-        task.setCreatorId(user.getId());
-        task.setId(taskJson.getId());
-        task.setProjectId(projectId);
         task.setTitle(taskJson.getTitle());
+        task.setBody(taskJson.getBody());
+        task.setProjectId(projectId);
+        task.setCreatorId(user.getId());
+        task.setCreateAt(LocalDateTime.now());
+        task.setComplete(false);
+        task.setCompleteAt(null);
+        task.setCompleterId(null);
+        task.setId(taskJson.getId());
         task = projectService.createTask(task);
-        taskJson.getExecutors().forEach(u -> projectService.addExecutor(taskJson.getId(), u.getId()));
+        if (taskJson.getExecutors() == null) {
+            taskJson.setExecutors(new ArrayList<>());
+        }
+        taskJson.getExecutors().forEach(u ->
+                projectService.addExecutor(taskJson.getId(), u.getId()));
         return projectService.taskToJson(task);
     }
 

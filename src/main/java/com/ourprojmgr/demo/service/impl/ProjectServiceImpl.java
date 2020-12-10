@@ -3,6 +3,8 @@ package com.ourprojmgr.demo.service.impl;
 import com.ourprojmgr.demo.dao.IProjectDao;
 import com.ourprojmgr.demo.dao.IUserDao;
 import com.ourprojmgr.demo.dbmodel.*;
+import com.ourprojmgr.demo.exception.BusinessErrorType;
+import com.ourprojmgr.demo.exception.BusinessException;
 import com.ourprojmgr.demo.jsonmodel.*;
 import com.ourprojmgr.demo.service.IProjectService;
 import com.ourprojmgr.demo.service.IUserService;
@@ -154,13 +156,19 @@ public class ProjectServiceImpl implements IProjectService {
     }
 
     @Override
-    public Invitation sendInvitation(User sender, User Receiver, Project project) {
+    public Invitation sendInvitation(User sender, User receiver, Project project) {
+        if (isMemberOfProject(receiver, project)) {
+            throw new BusinessException(
+                    BusinessErrorType.RECEIVER_ALREADY_IN_PROJECT,
+                    "Receiver with uid " + receiver.getId() + " is already in project.");
+        }
         Invitation invitation = new Invitation();
         invitation.setSenderId(sender.getId());
-        invitation.setReceiverId(Receiver.getId());
+        invitation.setReceiverId(receiver.getId());
         invitation.setProjectId(project.getId());
         invitation.setCreateAt(LocalDateTime.now());
         invitation.setStatus(Invitation.STATUS_CREATED);
+        invitation.setEndAt(null);
         projectDao.insertInvitation(invitation);
         return invitation;
     }
@@ -177,24 +185,27 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public void acceptInvitation(User user, Invitation invitation) {
-        Project project = getProjectById(invitation.getProjectId());
+        checkInvitationIsCreatedOrThrow(invitation);
+        checkUserIsInvitationReceiverOrThrow(user, invitation);
         invitation.setStatus(Invitation.STATUS_ACCEPTED);
         projectDao.updateInvitation(invitation);
-        projectDao.insertMember(user.getId(), invitation.getProjectId(), "Member", LocalDateTime.now());
+        if (!isMemberOfProject(user, getProjectById(invitation.getProjectId()))) {
+            projectDao.insertMember(user.getId(), invitation.getProjectId(),
+                    "Member", LocalDateTime.now());
+        }
     }
 
     @Override
     public void rejectInvitation(User user, Invitation invitation) {
-        Project project = getProjectById(invitation.getProjectId());
-        if (user.getId() != invitation.getReceiverId()) return;
+        checkInvitationIsCreatedOrThrow(invitation);
+        checkUserIsInvitationReceiverOrThrow(user, invitation);
         invitation.setStatus(Invitation.STATUS_REJECTED);
         projectDao.updateInvitation(invitation);
     }
 
     @Override
     public void cancelInvitation(User admin, Invitation invitation) {
-        Project project = getProjectById(invitation.getProjectId());
-        if (admin.getId() != invitation.getReceiverId()) return;
+        checkInvitationIsCreatedOrThrow(invitation);
         invitation.setStatus(Invitation.STATUS_CANCELED);
         projectDao.updateInvitation(invitation);
     }
@@ -229,7 +240,8 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public Task createTask(Task task) {
-        return projectDao.insertTask(task);
+        projectDao.insertTask(task);
+        return task;
     }
 
     @Override
@@ -259,14 +271,20 @@ public class ProjectServiceImpl implements IProjectService {
 
     @Override
     public TaskJson taskToJson(Task task) {
-        if (task == null) return null;
+        if (task == null) {
+            return null;
+        }
         TaskJson json = new TaskJson();
         json.setBody(task.getBody());
         json.setCommentNum(projectDao.getCommentCount(task.getId()));
         json.setComplete(task.isComplete());
         json.setCompleteAt(task.getCompleteAt());
-        User completer = userDao.getUserById(task.getCompleterId());
-        json.setCompleter(userService.userToJson(completer));
+        if (task.getCompleterId() == null) {
+            json.setCompleter(null);
+        } else {
+            User completer = userDao.getUserById(task.getCompleterId());
+            json.setCompleter(userService.userToJson(completer));
+        }
         json.setCreateAt(task.getCreateAt());
         User creator = userDao.getUserById(task.getCreatorId());
         json.setCreator(userService.userToJson(creator));
@@ -307,4 +325,24 @@ public class ProjectServiceImpl implements IProjectService {
         return commentJson;
     }
     //endregion
+
+    private boolean isMemberOfProject(User user, Project project) {
+        return getMember(project, user.getId()) != null;
+    }
+
+    private void checkUserIsInvitationReceiverOrThrow(User user, Invitation invitation) {
+        if (user.getId() != invitation.getReceiverId()) {
+            throw new BusinessException(
+                    BusinessErrorType.NOT_INVITATION_RECEIVER,
+                    "You are not the receiver.");
+        }
+    }
+
+    private void checkInvitationIsCreatedOrThrow(Invitation invitation) {
+        if (!invitation.getStatus().equals(Invitation.STATUS_CREATED)) {
+            throw new BusinessException(
+                    BusinessErrorType.INVITATION_EXPIRED,
+                    "Invitation is expired.");
+        }
+    }
 }

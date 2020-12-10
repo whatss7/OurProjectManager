@@ -45,6 +45,7 @@ public interface IUserDao {
      * 插入用户
      */
     @Insert("insert into User(username, nickname, hashedPassword, salt, createAt, updateAt) values(#{username}, #{nickname}, #{hashedPassword}, #{salt}, #{createAt}, #{updateAt})")
+    @Options(useGeneratedKeys = true)
     void insertUser(User user);
 
     /**
@@ -137,6 +138,7 @@ public interface IUserDao {
      * @param notification 新通知
      */
     @Update("update Notification set `read` = #{read}, title = #{title}, body = #{body}, createAt = #{createAt}, senderId = #{senderId}, receiverId = #{receiverId} where id = #{id}")
+    @Options(useGeneratedKeys = true)
     void updateNotification(Notification notification);
 
     /**

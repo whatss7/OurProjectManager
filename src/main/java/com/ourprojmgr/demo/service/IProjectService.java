@@ -88,12 +88,7 @@ public interface IProjectService {
      * @param Receiver 接收者
      * @param project  邀请加入的项目
      * @return Invitation 实体类
-     * @throws com.ourprojmgr.demo.exception.BusinessException 出现以下几种错误则抛异常：
-     *                                                         <ol>
-     *                                                             <li>sender 不是 admin</li>
-     *                                                             <li>receiver 已在项目中</li>
-     *                                                             <li>相同的邀请已存在（根据 sender、receiver、project 判断）</li>
-     *                                                         </ol>
+     * @throws com.ourprojmgr.demo.exception.BusinessException 若 receiver 已在项目中则抛异常
      */
     Invitation sendInvitation(User sender, User Receiver, Project project);
 

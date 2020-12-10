@@ -106,8 +106,10 @@ public class InvitationController {
                                         @PathVariable Integer id,
                                         @CurrentUser User user) {
         Project project = getProjectOrThrow(projectId);
-        checkAdminOrThrow(user, project);
         Invitation invitation = getInvitationOrThrow(id);
+        if (user.getId() != invitation.getReceiverId()) {
+            checkAdminOrThrow(user, project);
+        }
         return projectService.invitationToJson(invitation);
     }
 
@@ -119,7 +121,7 @@ public class InvitationController {
      * @throws BusinessException 业务异常
      * @author 朱华彬
      */
-    @GetMapping("/{id}/canceled")
+    @GetMapping("/{id}/cancel")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
     public void cancelInvitation(@PathVariable Integer id,

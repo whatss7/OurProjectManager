@@ -67,7 +67,7 @@
     - [获取通知成功](#获取通知成功-2)
     - [无 token 或 token 非法](#无-token-或-token-非法-6)
     - [操作者不是对应的用户](#操作者不是对应的用户-6)
-- [POST /api/users/{username}/sendNotifications 给别人发通知](#post-apiusersusernamesendnotifications-给别人发通知)
+- [POST /api/users/{username}/notifications 给别人发通知](#post-apiusersusernamenotifications-给别人发通知)
   - [请求头](#请求头-8)
   - [请求体](#请求体-4)
   - [应答](#应答-10)
@@ -439,14 +439,16 @@ HTTP 403 Forbidden
 }
 ```
 
-# POST /api/users/{username}/sendNotifications 给别人发通知
+# POST /api/users/{username}/notifications 给别人发通知
+路径参数的 username 就是接收者的用户名。
+
 必须先登录，未登录的用户不能发通知。
 
 ## 请求头
 需要在 Authorization 头信息中包含 token。
 
 ## 请求体
-一个 Notification 对象。
+一个 Notification 对象，只使用 title 和 body 字段。
 
 ## 应答
 ### 通知发送成功
