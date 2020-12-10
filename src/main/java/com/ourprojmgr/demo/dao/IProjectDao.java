@@ -106,7 +106,8 @@ public interface IProjectDao {
     @Update("update Comment set taskId = #{taskId}, body = #{body}, createAt = #{createAt}, userId = #{userId} where id = #{id}")
     void updateComment(Comment comment);
 
-    @Insert("insert Comment(id, taskId, body, createAt, userId) values(#{id}, #{taskId}, #{body}, #{createId}, #{userId}")
+    @Insert("insert Comment(id, taskId, body, createAt, userId) values(#{id}, #{taskId}, #{body}, #{createAt}, #{userId})")
+    @Options(useGeneratedKeys = true)
     void insertComment(Comment comment);
 
     @Delete("delete from Comment where id = #{id}")
