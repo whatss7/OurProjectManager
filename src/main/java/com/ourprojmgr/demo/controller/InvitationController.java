@@ -121,7 +121,7 @@ public class InvitationController {
      * @throws BusinessException 业务异常
      * @author 朱华彬
      */
-    @GetMapping("/{id}/canceled")
+    @GetMapping("/{id}/cancel")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
     public void cancelInvitation(@PathVariable Integer id,
