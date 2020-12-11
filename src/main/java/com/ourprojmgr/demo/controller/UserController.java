@@ -177,18 +177,19 @@ public class UserController {
      * @return 用户收到的所有通知
      * @throws BusinessException 业务异常
      */
-    @GetMapping("/{username}/recvNotifications")
+    @GetMapping("/{username}/notifications/recv")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
     public List<NotificationJson> getUserRecvNotifications(@PathVariable String username,
                                                            @CurrentUser User currentUser) {
-        checkSameUserOrThrow(username, currentUser); //检查操作者与要获取通知的用户是否是同一用户，若不是则抛异常
+        //检查操作者与要获取通知的用户是否是同一用户，若不是则抛异常
+        checkSameUserOrThrow(username, currentUser);
         User user = getUserFromNameOrThrow(username);
         return userService.getUserRecvNotificationJsons(user);
     }
 
     /**
-     * 获取用户收到的某条通知，若操作者不是对应的用户或未找到通知则抛异常
+     * 获取用户收到或发送的某条通知，若操作者不是对应的用户或未找到通知则抛异常
      *
      * @param username    要获取通知的用户名
      * @param nid         通知id
@@ -196,18 +197,28 @@ public class UserController {
      * @return 通知Json
      * @throws BusinessException 业务异常
      */
-    @GetMapping("/{username}/recvNotifications/{id}")
+    @GetMapping("/{username}/notifications/{id}")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
-    public NotificationJson getUserRecvNotificationByNid(@PathVariable("username") String username,
-                                                         @PathVariable("id") Integer nid,
-                                                         @CurrentUser User currentUser) {
-        checkSameUserOrThrow(username, currentUser);  //检查操作者与要获取通知的用户是否是同一用户，若不是则抛异常
-        User user = getUserFromNameOrThrow(username);
-        NotificationJson notificationJson = userService.getUserRecvNotificationJson(user, nid);
+    public NotificationJson getUserNotificationByNid(@PathVariable("username") String username,
+                                                     @PathVariable("id") Integer nid,
+                                                     @CurrentUser User currentUser) {
+        //检查操作者与要获取通知的用户是否是同一用户，若不是则抛异常
+        checkSameUserOrThrow(username, currentUser);
+        NotificationJson notificationJson = userService.getUserRecvNotificationJson(currentUser, nid);
+        if (notificationJson == null) {
+            notificationJson = userService.getUserSendNotificationJson(currentUser, nid);
+        }
         if (notificationJson == null) { //若未找到通知则抛异常
             throw new BusinessException(BusinessErrorType.NOTIFICATION_NOT_FOUND,
                     "user '" + username + "' has not received notification '" + nid + "'");
+        }
+        if (currentUser.getId() != notificationJson.getSender().getId()
+                && currentUser.getId() != notificationJson.getReceiver().getId()) {
+            //该用户既不是发送者也不是接收者
+            throw new BusinessException(
+                    BusinessErrorType.PERMISSION_DENIED,
+                    "user " + username + " is not sender or receiver of this notification.");
         }
         return notificationJson;
     }
@@ -221,16 +232,16 @@ public class UserController {
      * @param currentUser     当前用户
      * @throws BusinessException 业务异常
      */
-    @PatchMapping("/{username}/recvNotifications/{id}")
+    @PatchMapping("/{username}/notifications/{id}")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
     public void patchUserRecvNotificationByNid(@PathVariable("username") String username,
                                                @PathVariable("id") Integer nid,
                                                @RequestBody NotificationJson newNotification,
                                                @CurrentUser User currentUser) {
-        checkSameUserOrThrow(username, currentUser); //检查操作者与要修改通知状态的用户是否是同一用户，若不是则抛异常
-        User user = getUserFromNameOrThrow(username);
-        Notification notification = userService.getUserRecvNotification(user, nid);
+        //检查操作者与要修改通知状态的用户是否是同一用户，若不是则抛异常
+        checkSameUserOrThrow(username, currentUser);
+        Notification notification = userService.getUserRecvNotification(currentUser, nid);
         if (notification == null) { //若未找到通知则抛异常
             throw new BusinessException(BusinessErrorType.NOTIFICATION_NOT_FOUND,
                     "user '" + username + "' has not received notification '" + nid + "'");
@@ -247,7 +258,7 @@ public class UserController {
      * @return 用户发送的所有通知
      * @throws BusinessException 业务异常
      */
-    @GetMapping("/{username}/sendNotifications")
+    @GetMapping("/{username}/notifications/send")
     @ResponseStatus(HttpStatus.OK)
     @LoginRequired
     public List<NotificationJson> getUserSendNotifications(@PathVariable String username,
@@ -255,30 +266,6 @@ public class UserController {
         checkSameUserOrThrow(username, currentUser);  //检查操作者与要获取通知的用户是否是同一用户，若不是则抛异常
         User user = getUserFromNameOrThrow(username);
         return userService.getUserSendNotificationJsons(user);
-    }
-
-    /**
-     * 获取用户发送的某条通知，若操作者不是对应的用户或未找到通知则抛异常
-     *
-     * @param username    要获取通知的用户的用户名
-     * @param nid         通知id
-     * @param currentUser 当前用户
-     * @return 通知Json
-     */
-    @GetMapping("/{username}/sendNotifications/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    @LoginRequired
-    public NotificationJson getUserSendNotificationsByNid(@PathVariable("username") String username,
-                                                          @PathVariable("id") Integer nid,
-                                                          @CurrentUser User currentUser) {
-        checkSameUserOrThrow(username, currentUser);
-        User user = getUserFromNameOrThrow(username);
-        NotificationJson notificationJson = userService.getUserSendNotificationJson(user, nid);
-        if (notificationJson == null) {
-            throw new BusinessException(BusinessErrorType.NOTIFICATION_NOT_FOUND,
-                    "user '" + username + "' has not sent notification '" + nid + "'");
-        }
-        return notificationJson;
     }
 
     /**

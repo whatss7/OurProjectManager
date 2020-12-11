@@ -39,34 +39,34 @@
     - [用户不存在](#用户不存在-4)
     - [无 token 或 token 非法](#无-token-或-token-非法-3)
     - [操作者不是对应的用户](#操作者不是对应的用户-3)
-- [GET /api/users/{username}/recvNotifications 获取收到的通知](#get-apiusersusernamerecvnotifications-获取收到的通知)
+- [GET /api/users/{username}/notifications/recv 获取收到的通知](#get-apiusersusernamenotificationsrecv-获取收到的通知)
   - [请求头](#请求头-4)
   - [应答](#应答-6)
     - [获取通知成功](#获取通知成功)
     - [用户不存在](#用户不存在-5)
     - [无 token 或 token 非法](#无-token-或-token-非法-4)
     - [操作者不是对应的用户](#操作者不是对应的用户-4)
-- [GET /api/users/{username}/recvNotifications/{id} 获取收到的某条通知](#get-apiusersusernamerecvnotificationsid-获取收到的某条通知)
+- [GET /api/users/{username}/notifications/send 获取发送的通知](#get-apiusersusernamenotificationssend-获取发送的通知)
   - [请求头](#请求头-5)
   - [应答](#应答-7)
     - [获取通知成功](#获取通知成功-1)
-    - [通知不存在](#通知不存在)
     - [无 token 或 token 非法](#无-token-或-token-非法-5)
     - [操作者不是对应的用户](#操作者不是对应的用户-5)
-- [PATCH /api/users/{username}/recvNotifications/{id} 修改通知已读状态](#patch-apiusersusernamerecvnotificationsid-修改通知已读状态)
+- [GET /api/users/{username}/notifications/{id} 获取某条通知](#get-apiusersusernamenotificationsid-获取某条通知)
   - [请求头](#请求头-6)
-  - [请求体](#请求体-3)
   - [应答](#应答-8)
+    - [获取通知成功](#获取通知成功-2)
+    - [通知不存在](#通知不存在)
+    - [无 token 或 token 非法](#无-token-或-token-非法-6)
+    - [操作者不是对应的用户](#操作者不是对应的用户-6)
+- [PATCH /api/users/{username}/notifications/{id} 修改通知已读状态](#patch-apiusersusernamenotificationsid-修改通知已读状态)
+  - [请求头](#请求头-7)
+  - [请求体](#请求体-3)
+  - [应答](#应答-9)
     - [修改已读状态成功](#修改已读状态成功)
     - [通知不存在](#通知不存在-1)
     - [无 token 或 token 无效](#无-token-或-token-无效)
     - [操作者不是对应用户](#操作者不是对应用户)
-- [GET /api/users/{username}/sendNotifications 获取发送的通知](#get-apiusersusernamesendnotifications-获取发送的通知)
-  - [请求头](#请求头-7)
-  - [应答](#应答-9)
-    - [获取通知成功](#获取通知成功-2)
-    - [无 token 或 token 非法](#无-token-或-token-非法-6)
-    - [操作者不是对应的用户](#操作者不是对应的用户-6)
 - [POST /api/users/{username}/notifications 给别人发通知](#post-apiusersusernamenotifications-给别人发通知)
   - [请求头](#请求头-8)
   - [请求体](#请求体-4)
@@ -74,13 +74,6 @@
     - [通知发送成功](#通知发送成功)
     - [用户不存在](#用户不存在-6)
     - [无 token 或 token 非法](#无-token-或-token-非法-7)
-- [GET /api/users/{username}/sendNotifications/{id} 获取发送的某条通知](#get-apiusersusernamesendnotificationsid-获取发送的某条通知)
-  - [请求头](#请求头-9)
-  - [应答](#应答-11)
-    - [获取通知成功](#获取通知成功-3)
-    - [通知不存在](#通知不存在-2)
-    - [无 token 或 token 非法](#无-token-或-token-非法-8)
-    - [操作者不是对应的用户](#操作者不是对应的用户-7)
 
 # POST /api/users 注册新用户
 ## 请求体
@@ -301,7 +294,7 @@ HTTP 403 Forbidden
 }
 ```
 
-# GET /api/users/{username}/recvNotifications 获取收到的通知
+# GET /api/users/{username}/notifications/recv 获取收到的通知
 需要验证身份，只有自己才能查看自己的通知。
 
 ## 请求头
@@ -338,8 +331,26 @@ HTTP 403 Forbidden
 }
 ```
 
-# GET /api/users/{username}/recvNotifications/{id} 获取收到的某条通知
+# GET /api/users/{username}/notifications/send 获取发送的通知
 需要验证身份，只有自己才能查看自己的通知。
+
+## 请求头
+需要在 Authorization 头信息中包含 token。
+
+## 应答
+### 获取通知成功
+HTTP 200 OK
+
+返回一个装有 Notification 对象的数组。
+
+### 无 token 或 token 非法
+### 操作者不是对应的用户
+
+# GET /api/users/{username}/notifications/{id} 获取某条通知
+需要验证身份：
+
+1. 请求者应是 API 路径中 username 的用户。
+1. 请求者应是该通知的发送者或接收者。
 
 ## 请求头
 需要在 Authorization 头信息中包含 token。
@@ -351,43 +362,14 @@ HTTP 200 OK
 返回一个 Notification 对象。
 
 ### 通知不存在
-HTTP 404 NotFound
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "NotificationNotFound",
-    "message": "..."
-}
-```
-
 ### 无 token 或 token 非法
-HTTP 401 Unauthorized
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "NotLogin",
-    "message": "..."
-}
-```
-
 ### 操作者不是对应的用户
-HTTP 403 Forbidden
 
-返回一个 ApiResponse。
+# PATCH /api/users/{username}/notifications/{id} 修改通知已读状态
+需要验证身份：
 
-```json
-{
-    "type": "PermissionDenied",
-    "message": "..."
-}
-```
-
-# PATCH /api/users/{username}/recvNotifications/{id} 修改通知已读状态
-需要验证身份，只有自己才能修改自己收到的通知的已读状态。
+1. 请求者应是 API 路径中 username 的用户。
+1. 请求者应是该通知的收件人。
 
 ## 请求头
 需要在 Authorization 头信息中包含 token。
@@ -402,42 +384,6 @@ HTTP 200 OK
 ### 通知不存在
 ### 无 token 或 token 无效
 ### 操作者不是对应用户
-
-# GET /api/users/{username}/sendNotifications 获取发送的通知
-需要验证身份，只有自己才能查看自己的通知。
-
-## 请求头
-需要在 Authorization 头信息中包含 token。
-
-## 应答
-### 获取通知成功
-HTTP 200 OK
-
-返回一个装有 Notification 对象的数组。
-
-### 无 token 或 token 非法
-HTTP 401 Unauthorized
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "NotLogin",
-    "message": "..."
-}
-```
-
-### 操作者不是对应的用户
-HTTP 403 Forbidden
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "PermissionDenied",
-    "message": "..."
-}
-```
 
 # POST /api/users/{username}/notifications 给别人发通知
 路径参数的 username 就是接收者的用户名。
@@ -463,54 +409,6 @@ HTTP 401 Unauthorized
 ```json
 {
     "type": "NotLogin",
-    "message": "..."
-}
-```
-
-# GET /api/users/{username}/sendNotifications/{id} 获取发送的某条通知
-需要验证身份，只有自己才能查看自己的通知。
-
-## 请求头
-需要在 Authorization 头信息中包含 token。
-
-## 应答
-### 获取通知成功
-HTTP 200 OK
-
-返回一个 Notification 对象。
-
-### 通知不存在
-HTTP 404 NotFound
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "NotificationNotFound",
-    "message": "..."
-}
-```
-
-### 无 token 或 token 非法
-HTTP 401 Unauthorized
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "NotLogin",
-    "message": "..."
-}
-```
-
-### 操作者不是对应的用户
-HTTP 403 Forbidden
-
-返回一个 ApiResponse。
-
-```json
-{
-    "type": "PermissionDenied",
     "message": "..."
 }
 ```

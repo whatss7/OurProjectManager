@@ -163,7 +163,6 @@ public class UserServiceImpl implements IUserService {
      *
      * @param user     用户
      * @param password 原始密码
-     * @return
      */
     @Override
     public boolean isRightPassword(User user, String password) {
