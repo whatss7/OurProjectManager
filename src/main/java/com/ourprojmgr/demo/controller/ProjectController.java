@@ -213,13 +213,13 @@ public class ProjectController {
         task.setComplete(false);
         task.setCompleteAt(null);
         task.setCompleterId(null);
-        task.setId(taskJson.getId());
         task = projectService.createTask(task);
         if (taskJson.getExecutors() == null) {
             taskJson.setExecutors(new ArrayList<>());
         }
+        int taskId = task.getId();
         taskJson.getExecutors().forEach(u ->
-                projectService.addExecutor(taskJson.getId(), u.getId()));
+                projectService.addExecutor(taskId, u.getId()));
         return projectService.taskToJson(task);
     }
 
