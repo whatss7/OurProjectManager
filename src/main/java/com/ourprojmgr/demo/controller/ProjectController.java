@@ -275,8 +275,10 @@ public class ProjectController {
         throwIfNotMember(user, project);
         Task task = getTaskOrThrow(id, projectId);
         task.setComplete(json.isComplete());
-        task.setCompleterId(user.getId());
-        task.setCompleteAt(LocalDateTime.now());
+        if (json.isComplete()) {
+            task.setCompleterId(user.getId());
+            task.setCompleteAt(LocalDateTime.now());
+        }
         projectService.updateTask(task);
     }
 
