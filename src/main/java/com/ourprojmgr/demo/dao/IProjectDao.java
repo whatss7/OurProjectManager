@@ -78,7 +78,7 @@ public interface IProjectDao {
     @Options(useGeneratedKeys = true)
     void insertTask(Task task);
 
-    @Update("update task set projectId = #{projectId}, title = #{title}, body = #{body}, createAt = #{createAt}, creatorId = #{createId}, complete = #{complete}, completeAt = #{completeAt}, completeId = #{completeId}")
+    @Update("update task set projectId = #{projectId}, title = #{title}, body = #{body}, createAt = #{createAt}, creatorId = #{creatorId}, complete = #{complete}, completeAt = #{completeAt}, completerId = #{completerId}")
     void updateTask(Task task);
 
     @Delete("delete from task where id = #{id}")
