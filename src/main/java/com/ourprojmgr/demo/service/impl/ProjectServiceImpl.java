@@ -188,6 +188,7 @@ public class ProjectServiceImpl implements IProjectService {
         checkInvitationIsCreatedOrThrow(invitation);
         checkUserIsInvitationReceiverOrThrow(user, invitation);
         invitation.setStatus(Invitation.STATUS_ACCEPTED);
+        invitation.setEndAt(LocalDateTime.now());
         projectDao.updateInvitation(invitation);
         if (!isMemberOfProject(user, getProjectById(invitation.getProjectId()))) {
             projectDao.insertMember(user.getId(), invitation.getProjectId(),
@@ -200,6 +201,7 @@ public class ProjectServiceImpl implements IProjectService {
         checkInvitationIsCreatedOrThrow(invitation);
         checkUserIsInvitationReceiverOrThrow(user, invitation);
         invitation.setStatus(Invitation.STATUS_REJECTED);
+        invitation.setEndAt(LocalDateTime.now());
         projectDao.updateInvitation(invitation);
     }
 
@@ -207,6 +209,7 @@ public class ProjectServiceImpl implements IProjectService {
     public void cancelInvitation(User admin, Invitation invitation) {
         checkInvitationIsCreatedOrThrow(invitation);
         invitation.setStatus(Invitation.STATUS_CANCELED);
+        invitation.setEndAt(LocalDateTime.now());
         projectDao.updateInvitation(invitation);
     }
     //endregion
