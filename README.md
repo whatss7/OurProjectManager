@@ -1,5 +1,7 @@
 # Our Project Manager
-本项目为软件架构、Java EE 大作业。下载软件架构课程报告请点[此处](https://github.com/whatss7/OurProjectManager/releases/tag/v1.0)。
+本项目为软件架构、Java EE 大作业：多人协作的任务管理工具。
+
+下载软件架构课程报告请点[此处](https://github.com/whatss7/OurProjectManager/releases/tag/v1.0)。
 
 本仓库为**后端**代码和项目**文档**，**前端**部分请移步[此处](https://github.com/zhb2000/OurProjectManager-FrontEnd)。
 
