@@ -78,10 +78,10 @@ public interface IProjectDao {
     @Options(useGeneratedKeys = true)
     void insertTask(Task task);
 
-    @Update("update task set projectId = #{projectId}, title = #{title}, body = #{body}, createAt = #{createAt}, creatorId = #{creatorId}, complete = #{complete}, completeAt = #{completeAt}, completerId = #{completerId} where id = #{id}")
+    @Update("update Task set projectId = #{projectId}, title = #{title}, body = #{body}, createAt = #{createAt}, creatorId = #{creatorId}, complete = #{complete}, completeAt = #{completeAt}, completerId = #{completerId} where id = #{id}")
     void updateTask(Task task);
 
-    @Delete("delete from task where id = #{id}")
+    @Delete("delete from Task where id = #{id}")
     void deleteTask(int taskId);
 
     @Select("select u.* from User u, TaskExecutor ex where ex.taskId = #{taskId} and ex.executorId = u.id")

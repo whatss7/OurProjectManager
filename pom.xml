@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.ourprojmgr</groupId>
-    <artifactId>demo</artifactId>
+    <artifactId>opm</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>demo</name>
     <description>Homework: Our Project Manager</description>

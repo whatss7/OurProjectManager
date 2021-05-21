@@ -1,6 +1,7 @@
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+    # url: jdbc:mysql://opm_db:3306/OurProjectManagerDb?serverTimezone=UTC
     url: jdbc:mysql://localhost:3306/OurProjectManagerDb?serverTimezone=UTC
     username: root
     password: 123
